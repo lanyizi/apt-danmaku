@@ -2,6 +2,7 @@ import danmaku.Cleanup;
 import danmaku.World;
 import danmaku.components.Alice;
 import danmaku.components.AliceStage1;
+import danmaku.components.AliceStage2;
 import danmaku.components.PlayerControl;
 import danmaku.components.Reimu;
 import ra3.Lan;
@@ -39,7 +40,9 @@ class danmaku.Main {
         });
 
         var aliceObject = world.instantiate("Alice");
-        aliceObject.addComponent(new AliceStage1());
+        var levels: Array = [new AliceStage2(), new AliceStage2(), new AliceStage2()];
+        var alice1: Alice = aliceObject.addComponent(new AliceStage1());
+        alice1.getNextLevel = function() { return levels.shift(); };
 
         var reimuObject = world.instantiate("Reimu");
         reimuObject.addComponent(new PlayerControl(movieClip.mouseClickChecker));

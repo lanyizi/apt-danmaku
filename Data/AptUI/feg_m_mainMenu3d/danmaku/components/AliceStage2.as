@@ -69,28 +69,4 @@ class danmaku.components.AliceStage2 extends Alice {
             y: _initialPosition.y + py * scale
         });
     }
-
-    private function toNextStage(): Void {
-        ++_transitionTime;
-        var p = _self.getPosition();
-        var px = p.x;
-        var py = p.y;
-        var initialX = _initialPosition.x;
-        var initialY = _initialPosition.y;
-        var nextX = (initialX + px) / 2;
-        var nextY = (initialY + py) / 2;
-        if (_transitionTime < 15) {
-            _self.setPosition({ x: nextX, y: nextY });
-            return;
-        }
-        else if (_transitionTime === 15) {
-            _self.setPosition({ x: initialX, y: initialY });
-        }
-        _healthBar.showHealth((_transitionTime - 15) / 15);
-        if (_transitionTime === 30) {
-            var self: GameObject = _self;
-            self.removeComponent(this);
-            self.addComponent(new AliceStage2());
-        }
-    }
 }

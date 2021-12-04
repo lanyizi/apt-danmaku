@@ -7,7 +7,8 @@ class danmaku.components.Alice extends Character {
     private var _healthBar: MovieClip;
     private var _reimu: Reimu;
     private var _transitionTime: Number;
-    public var nextLevel: Alice;
+    private var _nextLevel: Alice;
+    public var getNextLevel: Function;
 
     public function Alice(maxHitpont: Number, hitRadius: Number) {
         super(maxHitpont, hitRadius);
@@ -22,6 +23,8 @@ class danmaku.components.Alice extends Character {
 
     private function toNextStage(): Void {
         ++_transitionTime;
+        _healthBar.showHealth(Math.max(0, (_transitionTime - 15) / 15));
+
         var p = _self.getPosition();
         var px = p.x;
         var py = p.y;
@@ -36,16 +39,19 @@ class danmaku.components.Alice extends Character {
         else if (_transitionTime === 15) {
             _self.setPosition({ x: initialX, y: initialY });
         }
-        if (!nextLevel) {
+        if (!_nextLevel && getNextLevel) {
+            _nextLevel = getNextLevel();
+        }
+        if (!_nextLevel) {
             Game.instance().setPlayerVictorious();
             _self.removeComponent(this);
             return;
         }
-        _healthBar.showHealth((_transitionTime - 15) / 15);
         if (_transitionTime === 30) {
             var self = _self;
             self.removeComponent(this);
-            self.addComponent(nextLevel);
+            self.addComponent(_nextLevel);
+            _nextLevel.getNextLevel = getNextLevel;
         }
     }
 }
