@@ -219,7 +219,7 @@ class ra3.Lan {
                 var isNormalMap = MapHeuristic.isNormalSixPlayersMap(positions.array);
                 _sixPlayersMaps.push(currentMap);
 
-                
+
                 var curId = MAPTEXTFIELDID++;
                 if (!World.test.previousPage) {
                     allButtons.push([]);
