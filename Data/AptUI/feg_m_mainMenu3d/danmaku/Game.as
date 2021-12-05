@@ -1,7 +1,18 @@
 class danmaku.Game {
+    public static var EASY: Number = 0;
+    public static var NORMAL: Number = 1;
+    public static var HARD: Number = 2;
+    public static var BRUTAL: Number = 3;
+
     private static var _instance: Game;
+    public var difficulty: Number;
     public var fighting: Boolean;
     public var chatProgress: String;
+
+    public function Game() {
+        difficulty = BRUTAL;
+        fighting = false;
+    }
 
     public function setPlayerVictorious(): Void {
         fighting = false;

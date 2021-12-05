@@ -3,6 +3,7 @@ import danmaku.components.Character;
 import danmaku.components.Reimu;
 
 class danmaku.components.Alice extends Character {
+    private var _difficulty: Number;
     private var _initialPosition: Object;
     private var _healthBar: MovieClip;
     private var _reimu: Reimu;
@@ -12,6 +13,7 @@ class danmaku.components.Alice extends Character {
 
     public function Alice(maxHitpont: Number, hitRadius: Number) {
         super(maxHitpont, hitRadius);
+        _difficulty = Game.instance().difficulty;
     }
 
     private function start(): Void {
