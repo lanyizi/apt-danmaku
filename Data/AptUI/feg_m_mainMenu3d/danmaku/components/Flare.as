@@ -10,6 +10,7 @@ class danmaku.components.Flare extends Component {
     private var _vy: Number;        //      = _direction * _speed
     private var _sprite: MovieClip; // The MovieClip of this bullet
     private var _exploded: Boolean;
+    public var expireSpeed: Number;
     public var life: Number;
     public var owner: Character;
     public var scale: Number;
@@ -26,6 +27,7 @@ class danmaku.components.Flare extends Component {
         _vx = 0;
         _vy = 0;
         _exploded = false;
+        expireSpeed = 1;
         life = 30;
         scale = 1;
         alpha = 100;
@@ -82,11 +84,11 @@ class danmaku.components.Flare extends Component {
         // rotation
         _sprite._rotation = _rotation;
 
-        if (owner && owner.hitpoint < 0) {
+        if (owner && (owner.hitpoint <= 0 || !owner.gameObject())) {
             explode();
         }
 
-        --life;
+        life -= expireSpeed;
         if (life <= 0) {
             expire();
         }
@@ -97,6 +99,7 @@ class danmaku.components.Flare extends Component {
         if (life > 0) {
             life = 0;
         }
+        expireSpeed = 1;
 
         // default
         _sprite._alpha = 100;
@@ -134,7 +137,7 @@ class danmaku.components.Flare extends Component {
         flare._sprite._alpha = 100;
         flare.alpha = 100;
         flare.maxAlpha = 100;
-        flare.setSpeed(_speed / 2);
+        flare.setSpeed(Math.sqrt(_speed) / 2);
         flare.setDirection(getDirection());
     }
 }
