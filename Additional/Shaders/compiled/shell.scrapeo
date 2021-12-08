@@ -1,0 +1,15 @@
+var shader ScreenBackground ScreenBackground.fx
+
+proc Shell
+	setclearcolor 0 0 0 1
+	setcleardepth 1.0
+	
+	clear
+
+	setshader ScreenBackground Default
+	renderquad
+
+	renderUI
+
+	renderDebugDisplays
+endproc
