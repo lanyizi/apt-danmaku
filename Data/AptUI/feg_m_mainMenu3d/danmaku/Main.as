@@ -5,6 +5,7 @@ import danmaku.components.AliceStage1;
 import danmaku.components.AliceStage2;
 import danmaku.components.PlayerControl;
 import danmaku.components.Reimu;
+import danmaku.overlays.TextButton;
 import ra3.Lan;
 import ra3.MessageHandler;
 
@@ -16,8 +17,8 @@ class danmaku.Main {
             delete _global.ra3;
         });
 
-        var worldMovieClip = movieClip.createEmptyMovieClip("world", 100);
-        var overlayMovieClip = movieClip.createEmptyMovieClip("overlay", 200);
+        var worldMovieClip: MovieClip = movieClip.createEmptyMovieClip("world", 100);
+        var overlayMovieClip: MovieClip = movieClip.createEmptyMovieClip("overlay", 200);
         var world: World = new World(worldMovieClip, movieClip._width, movieClip._height);
 
         var fps = NaN;
@@ -39,13 +40,25 @@ class danmaku.Main {
             worldMovieClip.onEnterFrame = null;
         });
 
-        var aliceObject = world.instantiate("Alice");
-        var levels: Array = [new AliceStage2(), new AliceStage2(), new AliceStage2()];
-        var alice1: Alice = aliceObject.addComponent(new AliceStage1());
-        alice1.getNextLevel = function() { return levels.shift(); };
+        world.onAfterNextFrame(function() {
+            var sprite = overlayMovieClip.attachMovie("TextButton", "pause", 10);
+            var pause: TextButton = new TextButton(sprite);
+            pause.sprite()._x = 1200;
+            pause.sprite()._y = 10;
+            pause.setWidth(60);
+            pause.setText("\u6682\u505C");
+            pause.onClick = function() { world.paused = !world.paused; };
+        });
 
-        var reimuObject = world.instantiate("Reimu");
-        reimuObject.addComponent(new PlayerControl(movieClip.mouseClickChecker));
-        reimuObject.addComponent(new Reimu());
+        world.onAfterNextFrame(function() {
+            var aliceObject = world.instantiate("Alice");
+            var levels: Array = [new AliceStage2(), new AliceStage2(), new AliceStage2()];
+            var alice1: Alice = aliceObject.addComponent(new AliceStage1());
+            alice1.getNextLevel = function() { return levels.shift(); };
+
+            var reimuObject = world.instantiate("Reimu");
+            reimuObject.addComponent(new PlayerControl(movieClip.mouseClickChecker));
+            reimuObject.addComponent(new Reimu());
+        });
     }
 }
