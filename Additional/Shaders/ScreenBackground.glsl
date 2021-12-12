@@ -41,14 +41,14 @@ float remap(float a, float b, float c, float d, float t) {
 }
 
 float within(float a, float b, float t) {
-	return (t-a) / (b-a); 
+	return (t-a) / (b-a);
 }
 
 float skewbox(vec2 uv, vec3 top, vec3 bottom, float blur) {
 	float y = within(top.z, bottom.z, uv.y);
     float left = mix(top.x, bottom.x, y);
     float right = mix(top.y, bottom.y, y);
-    
+
     float horizontal = B(left, right, uv.x, blur);
     float vertical = B(bottom.z, top.z, uv.y, blur);
     return horizontal*vertical;
@@ -62,16 +62,16 @@ vec4 pine(vec2 uv, vec2 p, float s, float focus) {
     c += skewbox(uv, vec3(-.13, .13, .43), vec3(-.22, .22, .2), focus);
     float trunk = skewbox(uv, vec3(-.04, .04, .2), vec3(-.04, .04, -.1), focus);
     c += trunk;
-    
+
     vec4 col = mix(vec4(.9,1.,.8,0.), vec4(1.,1.,1.,0), trunk);
     col.a = c;
-   
+
     float shadow = skewbox(uv.yx, vec3(.6, .65, .13), vec3(.65, .65, -.1), focus);
     shadow += skewbox(uv.yx, vec3(.43, .43, .13), vec3(.36, .43, -.2), focus);
     shadow += skewbox(uv.yx, vec3(.15, .2, .08), vec3(.17, .2, -.08), focus);
-    
+
     col.rgb = mix(col.rgb, col.rgb*.8, shadow);
-    
+
     return col;
 }
 
@@ -80,7 +80,7 @@ float getheight(float x) {
 }
 
 vec4 landscape(vec2 uv, float d, float p, float f, float a, float y, float seed, float focus) {
-    
+
     //d = fract(d * 2.) / 2.;
     // y = 1 - (1 - d) * 0.6;
     y = .525 - .6 + .6 * d;
@@ -88,21 +88,21 @@ vec4 landscape(vec2 uv, float d, float p, float f, float a, float y, float seed,
 	uv *= d;
     float x = uv.x*PI*f+p;
     float c = getheight(x)*a+y;
-    
+
     float b = floor(x*5.)/5.+.1;
     float h =  getheight(b)*a+y;
-    
+
     float e = fwidth(uv.y);
-    
+
     vec4 col = vec4(S(c+e, c-e, uv.y));
     //col.rgb *= mix(0.9, 1., abs(uv.y-c)*20.);
-    
+
     x *= 5.;
     float id = floor(x);
     float n = hash11(id+seed);
-    
+
     x = fract(x);
-    
+
     y = (uv.y - h)*mix(5., 3., n)*3.5;
     float treeHeight = (.05/d) * mix(1.4, .7, n);
     y = within(h, h+treeHeight, uv.y);
@@ -111,16 +111,16 @@ vec4 landscape(vec2 uv, float d, float p, float f, float a, float y, float seed,
     //col += pineCol;
     col.rgb = mix(col.rgb, pineCol.rgb, pineCol.a);
     col.a = max(col.a, pineCol.a);
-    
+
     return saturate(col);
 }
 
 vec4 gradient(vec2 uv) {
-    
+
 	float c = 1.-length(MOONPOS-uv)/1.4;
-    
+
     vec4 col = vec4(c);
-    
+
     return col * vec4(.1, .1, .2, 1);
 }
 
@@ -131,33 +131,33 @@ float circ(vec2 uv, vec2 pos, float radius, float blur) {
 
 vec4 moon(vec2 uv) {
    	float c = circ(uv, MOONPOS, .07, .001);
-    
+
     float light = c * 1.-circ(uv, MOONPOS+vec2(.03), .07, .001);
-    
+
     vec4 col = saturate(vec4(light, light, light, c));
     col.rgb *=.5;
-    
+
     return col;
 }
 
 vec4 moonglow(vec2 uv, float foreground) {
-    
+
    	float c = circ(uv, MOONPOS, .1, .2);
-    
+
     vec4 col = vec4(c);
     col.rgb *=.2;
-    
+
     return col;
 }
 
 float stars(vec2 uv, float t) {
     t*=3.;
-    
+
     float n1 = hash12(uv*10000.);
     float n2 = hash12(uv*11234.);
     float alpha1 = pow(n1, 20.);
     float alpha2 = pow(n2, 20.);
-    
+
     float twinkle = sin((uv.x-t+cos(uv.y*20.+t))*10.);
     twinkle *= cos((uv.y*.234-t*3.24+sin(uv.x*12.3+t*.243))*7.34);
     twinkle = (twinkle + 1.)/2.;
@@ -168,17 +168,17 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
 	vec2 uv = fragCoord.xy / iResolution.xy;
     float t = iTime*.05;
-     
+
     vec2 bgUV = uv*vec2(iResolution.x/iResolution.y, 1.);
     vec4 col = gradient(bgUV);
     vec4 moonCol = moon(bgUV);
     col.rgb += moonCol.rgb;
     col += stars(uv, t) * (1. - moonCol.a);
-    
+
     float dist = .10;
     float height = -.01;
     float amplitude = .02;
-    
+
     vec4 trees = vec4(0.);
     t = iTime * .5;
     float seed = floor(t);
@@ -195,13 +195,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         dist -= .1;
         --seed;
     }
-    
+
     /*
     dist = 1. + fract(1. - t);
     float seed = floor(-t * 10.);
     float i = 0.;
     vec4 trees = vec4(0.);
-    
+
     while (dist > 0.) {
         i = 10. - 10. * dist;
         vec4 layer = landscape(uv, dist, +i, 3., amplitude, .55, seed, .01);
@@ -220,14 +220,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         ++i;
     }*/
     col = mix(col, trees, trees.a);
-    
+
     col += moonglow(bgUV, 1.) * .5;
     col = saturate(col);
-    
+
     //vec4 foreground = landscape(uv, .02, t, 3., .0, -0.04, 1., .1);
     //foreground.rgb *= vec3(.1, .1, .2)*.5;
-    
+
     //col = mix(col, foreground, foreground.a);
-    
+
     fragColor = vec4(col);
 }
