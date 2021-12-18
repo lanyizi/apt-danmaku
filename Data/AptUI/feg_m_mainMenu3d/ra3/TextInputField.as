@@ -1,5 +1,6 @@
-import ra3.Cafe2_MouseBaseControl;
+﻿import ra3.Cafe2_MouseBaseControl;
 
+// 从 RA3 APT 里照搬过来的输入框，太神秘了
 class ra3.TextInputField extends Cafe2_MouseBaseControl /* implements ICafe2_FocusableControl */
 {
     var TextFieldMC: MovieClip;
@@ -15,12 +16,6 @@ class ra3.TextInputField extends Cafe2_MouseBaseControl /* implements ICafe2_Foc
     {
         super();
         this.m_type = "std_mouseTextInputField";
-        if (!m_width) {
-            m_width = 256;
-        }
-        if (!m_charLimit) {
-            m_charLimit = 256;
-        }
     }
     static function getContentsById(fieldId)
     {
@@ -35,7 +30,8 @@ class ra3.TextInputField extends Cafe2_MouseBaseControl /* implements ICafe2_Foc
         loadVariables("QueryGameEngine?NEXT_TEXT_INPUT_FIELD_ID",_loc1_);
         return Number(_loc1_.NEXT_TEXT_INPUT_FIELD_ID);
     }
-    function setWidth(newWidth)
+    // 手动调用这个方法会导致出现奇怪的现象，比如说只有一行的输入框突然开始换行之类的，太神秘了
+    private function setWidth(newWidth)
     {
         this.TextFieldMC.dataTF._width = newWidth;
         this.TextFieldMC.BGImgMiddle._x = this.TextFieldMC.BGImgLeft._width;
@@ -45,12 +41,36 @@ class ra3.TextInputField extends Cafe2_MouseBaseControl /* implements ICafe2_Foc
     }
     function onLoad()
     {
+        m_width = _width;
+        _xscale = 100;
+        _yscale = 100;
+
+        if (!m_charLimit) {
+            m_charLimit = 256;
+        }
+        if (m_allowHorzScroll === undefined) {
+            m_allowHorzScroll = true;
+        }
+
         this.m_textFieldID = getNextTextInputFieldID();
         var _loc3_ = !this.m_password ? "0" : "1";
         var _loc4_ = !m_allowHorzScroll ? "0" : "1";
         fscommand("CallGameFunction","%CreateTextInputField?Name=" + this + "|ID=" + this.m_textFieldID + "|Password=" + _loc3_ + "|CharLimit=" + m_charLimit + "|AllowScroll=" + _loc4_);
         this.TextFieldMC.dataTF.text = "$EDITABLE_TEXT_" + this.m_textFieldID;
         this.TextFieldMC.dataTF.setTextFormat(_global.std_config.textBox_textFormat_unhighlight);
+        this.TextFieldMC.dataTF.autoSize = "left";
+        var realHeight = this.TextFieldMC.dataTF._height;
+        this.TextFieldMC.dataTF.autoSize = "none";
+        this.TextFieldMC.dataTF._x = 0;
+        this.TextFieldMC.dataTF._y = 0;
+        this.TextFieldMC.dataTF.wordWrap = false;
+        this.TextFieldMC.dataTF.multiline = false;
+        this.TextFieldMC.dataTF._height = realHeight;
+        this.TextFieldMC.BGImgLeft._height = realHeight;
+        this.TextFieldMC.BGImgMiddle._height = realHeight;
+        this.TextFieldMC.BGImgRight._height = realHeight;
+        this.hitRegion._height = realHeight;
+
         hitRegion.onRollOver = this.bind0(this,this.mouseEventTextFieldRollover);
         hitRegion.onRollOut = this.bind0(this,this.mouseEventTextFieldRollOut);
         hitRegion.onPress = this.bind0(this,this.mouseEventTextFieldPress);
