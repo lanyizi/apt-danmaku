@@ -1,0 +1,25 @@
+# [好多坑啊！！！！](Data/AptUI/各种坑.txt)
+
+- [各种坑](Data/AptUI/各种坑.txt)
+- Flash MX 2004：
+
+  - 官方激活教程（嗯，并不需要破解 2333）：https://helpx.adobe.com/cn/x-productkb/policy-pricing/macromedia-legacy-activation-error.html
+  - 下载地址：https://pan.baidu.com/s/1QbkCjW43FMhoYwdNLn2wfg
+  - 提取码：8t3h
+
+    也可以使用其他版本的 Flash，Flash CS6 是最后一个能兼容 Apt 的版本
+
+    不过呢，Flash MX 2004 无论在年代上，还是在各种 bug 和坑上面，都和 Apt 比较类似，不太容易出现两者行为不一致的情况（虽然实际上还是有……）
+
+- 临时魔改版 SDK （相应的云编译脚本还没更新，坐等 RC 把新的 Mod Studio 写出来（
+  - 下载地址：https://pan.baidu.com/s/1zKVsG-uXiQSfit8B9YZpUA
+  - 提取码：iap6
+
+魔改版的 SDK 能自动把 Data/AptUI 下面的 .swf 文件变成 Apt、并自动把它们编译到 mod
+
+至于 flash 相关的文件（[Data/AptUI/feg_m_mainMenu3d](Data/AptUI/feg_m_mainMenu3d)），主要分成这几部分：
+
+- [feg_m_mainMenu3d.fla](Data/AptUI/feg_m_mainMenu3d/feg_m_mainMenu3d.fla) 这个，嗯，就是 flash 文件（
+- [assets](Data/AptUI/feg_m_mainMenu3d/assets) 存放各种导入到了 fla 里的素材。需要的话，可以在 fla 的 Library 里可以用 update 功能，从 assets 文件夹重新导入这些素材
+- [danmaku](Data/AptUI/feg_m_mainMenu3d/danmaku) 存放了弹幕游戏的主要代码
+- [ra3](Data/AptUI/feg_m_mainMenu3d/ra3) 存放了与 RA3 打交道的各种代码，神秘莫测（
