@@ -122,7 +122,7 @@ float4 gradient(float2 uv) {
 
     float4 col = c.xxxx;
 
-    return col * float4(.1, .1, .2, 1);
+    return col * float4(.15, .15, .3, 1);
 }
 
 float circ(float2 uv, float2 pos, float radius, float blur) {
@@ -194,7 +194,7 @@ void mainImage(
         float focus = /* pow(dist - .3, 2.) * .3 */ .0;
         float fade = saturate(10. - abs(dist - .5) * 20.);
         float4 layer = landscape(uv, dist, x, 3., amplitude, .55, seed, focus);
-    	layer.rgb *= mix(float3(.1, .1, .06), float3(.1, .12, .3)+gradient(uv).x, 1.-i/10.);
+    	layer.rgb *= mix(float3(.14, .14, .08), float3(.08, .1, .3)+gradient(uv).x, 1.-i/10.);
         trees = mix(trees, layer, layer.a * fade);
         dist -= .1;
         --seed;

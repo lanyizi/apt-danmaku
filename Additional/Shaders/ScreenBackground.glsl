@@ -121,7 +121,7 @@ vec4 gradient(vec2 uv) {
 
     vec4 col = vec4(c);
 
-    return col * vec4(.1, .1, .2, 1);
+    return col * vec4(.15, .15, .3, 1);
 }
 
 float circ(vec2 uv, vec2 pos, float radius, float blur) {
@@ -190,7 +190,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         float focus = /* pow(dist - .3, 2.) * .3 */ .0;
         float fade = saturate(10. - abs(dist - .5) * 20.);
         vec4 layer = landscape(uv, dist, x, 3., amplitude, .55, seed, focus);
-    	layer.rgb *= mix(vec3(.1, .1, .06), vec3(.1, .12, .3)+gradient(uv).x, 1.-i/10.);
+    	layer.rgb *= mix(vec3(.14, .14, .08), vec3(.08, .1, .3)+gradient(uv).x, 1.-i/10.);
         trees = mix(trees, layer, layer.a * fade);
         dist -= .1;
         --seed;
