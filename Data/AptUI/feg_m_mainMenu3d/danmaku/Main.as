@@ -6,6 +6,8 @@ import danmaku.components.AliceStage2;
 import danmaku.components.PlayerControl;
 import danmaku.components.Reimu;
 import danmaku.overlays.TextButton;
+import danmaku.overlays.Options;
+import danmaku.utilities.Bind;
 import ra3.Lan;
 import ra3.MessageHandler;
 
@@ -47,7 +49,13 @@ class danmaku.Main {
             pause.sprite()._y = 10;
             pause.setWidth(60);
             pause.setText("\u6682\u505C");
-            pause.onClick = function() { world.paused = !world.paused; };
+            pause.onClick = function() {
+                world.paused = true;
+                var menu = overlayMovieClip.attachMovie("Options", "menu", 20);
+                var options: Options = new Options(menu, function() {
+                    world.paused = false;
+                });
+            };
         });
 
         world.onAfterNextFrame(function() {
