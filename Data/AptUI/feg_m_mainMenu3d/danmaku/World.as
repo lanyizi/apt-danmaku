@@ -1,5 +1,8 @@
-import danmaku.GameObject;
+﻿import danmaku.GameObject;
+import danmaku.utilities.Bind;
 
+// 存放并管理游戏里所有的 GameObject
+// 并在每帧调用各种需要的函数、运行游戏逻辑
 class danmaku.World {
     public static var test: MovieClip;
 
@@ -33,6 +36,7 @@ class danmaku.World {
     public function width(): Number { return _width; }
     public function height(): Number { return _height; }
 
+    // 用来在屏幕上打 log 的临时函数（
     private var _logs: Array = [];
     public function log(s: String): Void {
         if (s.charAt(0) === '$') {
@@ -77,6 +81,7 @@ class danmaku.World {
         _movieClip._parent.log.text = r;
     }
 
+    // 需要在每帧调用以执行各种游戏逻辑
     public function update(): Void {
         if (paused) {
             return;
@@ -112,7 +117,13 @@ class danmaku.World {
         statistics += "Next id: " + _nextId + ";"
     }
 
+    // 创建一个新的 GameObject
     public function instantiate(movieClipId: String, depth: Number): GameObject {
+        // 在 Flash 里，depth 不仅用于排列顺序，而且还起到了某种类似于 ID 的作用
+        // 可是好多 depth 相关的 API 在 Apt 里都没有，因此需要手动管理一下（
+        // 一般来说，在这个弹幕游戏里，是不太需要关心 depth 的顺序的
+        // 但是至少要确保 depth 不能与现有的重复，但也不能耗尽地太快
+        // 因为可用的 depth 范围貌似只有十万来着（没记错的话）
         if (isNaN(depth)) {
             if (_freeDepths.length > 0) {
                 depth = Number(_freeDepths.shift());
@@ -133,11 +144,13 @@ class danmaku.World {
         return object;
     }
 
+    // 配合 GameObject.swapDepth()
     public function notifyDepthSwap(lhs: GameObject, rhs: GameObject) {
         _occupiedDepths[lhs.depth()] = lhs;
         _occupiedDepths[rhs.depth()] = rhs;
     }
 
+    // 销毁一个 GameObject，它的所有组件也都会在销毁之前被卸载
     public function destroy(gameObject: GameObject): Void {
         gameObject.removeAllComponents();
         delete _gameObjects[gameObject.id()];
@@ -162,6 +175,7 @@ class danmaku.World {
         _updaters = [];
     }
 
+    // 在所有的 GameObject 里找出符合类型的 Component
     public function findComponents(type: Object): Array {
         var result = [];
         for (var k in _gameObjects) {
@@ -173,6 +187,7 @@ class danmaku.World {
         return result;
     }
 
+    // 添加一个普通的、每帧执行（指被 update 调用）的函数
     public function addOnFrameListener(id: String, f: Function): Void {
         _updaters[id] = f;
     }
@@ -181,16 +196,18 @@ class danmaku.World {
         delete _updaters[id];
     }
 
+    // 添加一个普通的、在下一帧执行一次的函数
     public function onNextFrame(f: Function): String {
         var handlerId = "f__" + (_nextId++);
-        var self = this;
-        addOnFrameListener(handlerId, function() {
-            self.removeOnFrameListener(handlerId);
+        addOnFrameListener(handlerId, Bind.noArg(this, function() {
+            removeOnFrameListener(handlerId);
             f();
-        });
+        }));
         return handlerId;
     }
 
+    // 添加一个每帧执行的函数，
+    // 不过，它会在所有“普通的函数”都被调用了之后才会被调用
     public function addAfterFrameListener(id: String, f: Function): Void {
         _lateUpdaters[id] = f;
     }
@@ -199,13 +216,14 @@ class danmaku.World {
         delete _lateUpdaters[id];
     }
 
+    // 添加一个在下一帧执行的函数
+    // 不过，它会在所有“普通的函数”都被调用了之后才会被调用
     public function onAfterNextFrame(f: Function): String {
         var handlerId = "f__" + (_nextId++);
-        var self = this;
-        addAfterFrameListener(handlerId, function() {
-            self.removeAfterFrameListener(handlerId);
+        addAfterFrameListener(handlerId, Bind.noArg(this, function() {
+            removeAfterFrameListener(handlerId);
             f();
-        });
+        }));
         return handlerId;
     }
 }

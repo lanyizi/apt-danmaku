@@ -1,6 +1,9 @@
-import danmaku.Component;
+﻿import danmaku.Component;
 import danmaku.Options;
+import danmaku.utilities.Bind;
 
+// 处理玩家输入，主要是靠鼠标坐标来移动人物
+// 但是，它也通过预先放在场景里的一个按钮来检测鼠标点击
 class danmaku.components.PlayerControl extends Component {
     private static var SLOW_SPEED = 10;
     private static var FAST_SPEED = 20;
@@ -18,9 +21,12 @@ class danmaku.components.PlayerControl extends Component {
         _previousDx = 0;
         _slowMode = false;
         slowMode = 0;
-        var self = this;
-        _button.onPress = function() { self._slowMode = true; }
-        _button.onRelease = function() { self._slowMode = false; }
+        _button.onPress = Bind.noArg(this, function() {
+            _slowMode = true;
+        });
+        _button.onRelease = Bind.noArg(this, function() {
+            _slowMode = false;
+        });
     }
 
     private function start(): Void {
@@ -38,6 +44,9 @@ class danmaku.components.PlayerControl extends Component {
         var p = _self.getPosition();
         var dx = 0;
         var dy = 0;
+        // 曾经以为可以检测键盘输入，没想到红警3里却不支持（
+        // 可能以后可以靠文本输入框之类的曲线救国一下 23333
+        // 但总之，目前就只能靠鼠标了（
         if (_options.useKeyboardInput) {
             var speed = FAST_SPEED;
             if (Key.isDown(_options.keySlow)) {

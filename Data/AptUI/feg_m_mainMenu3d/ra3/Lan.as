@@ -1,8 +1,15 @@
-import ra3.MessageHandler;
+﻿import ra3.MessageHandler;
 import ra3.MapHeuristic;
 
+// 为了打 log 而引入的，该删了！
 import danmaku.World;
 
+// 这个类的名字其实应该改成 LanBasedGame 之类的（
+// 它的作用其实是自动在局域网大厅创建一个房间并自动启动游戏
+// 之所以是局域网，是因为遭遇战会有 Skirmish.ini 的 bug
+// 它会自动读取地图列表，通过地图上的出生点，找到能支持 6 个玩家的地图
+// 然后启动一局让玩家 1v5 AI 的游戏（
+// 由于功能复杂，因此它比较乱，而且有着大量（已经失效）的打 log 代码需要删除（
 class ra3.Lan {
     private static var INITIAL: Number = 0;
     private static var READY: Number = 1;
@@ -36,9 +43,13 @@ class ra3.Lan {
         _switchMapTimeout = 0;
         callGameFunction("%SetGameSetupMode?Mode=None");
         callGameFunction("%LanInit");
-        var self = this;
-        _messageHandler.addMessageHandler(MessageHandler.bind1(this, handleMessages));
-        _messageHandler.addOnExitScreenHandler(MessageHandler.bind0(this, destroy));
+        var self: Lan = this;
+        _messageHandler.addMessageHandler(function(m) {
+            self.handleMessages(m);
+        });
+        _messageHandler.addOnExitScreenHandler(function() {
+            self.destroy();
+        });
         _logger("Lan initialized");
     }
 

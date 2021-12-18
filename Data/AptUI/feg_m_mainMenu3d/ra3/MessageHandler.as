@@ -1,3 +1,6 @@
+﻿// 管理各种自定义的“系统消息处理函数”
+// 它还负责在 Apt 切换的时候自动移除所有的系统消息处理函数
+// 因此，写代码的时候，就不用费心去手动释放它们了（（
 class ra3.MessageHandler {
     private var _onExitScreen: Array;
     private var _messageHandlers: Array;
@@ -11,6 +14,7 @@ class ra3.MessageHandler {
         _global.gMH.addMessageHandler(_handler);
     }
 
+    // 添加一个“系统消息处理函数”
     public function addMessageHandler(f: Function) {
         _messageHandlers.push(f);
     }
@@ -25,20 +29,9 @@ class ra3.MessageHandler {
         }
     }
 
+    // 添加一个在切换 Apt 的时候执行的函数
     public function addOnExitScreenHandler(f: Function) {
         _onExitScreen.push(f);
-    }
-
-    public static function bind0(o, f) {
-        return function() { return f.call(o); };
-    }
-
-    public static function bind1(o, f) {
-        return function(x) { return f.call(o, x); };
-    }
-
-    public static function bind2(o, f) {
-        return function(x, y) { return f.call(o, x, y); };
     }
 
     private function onMessage(message): Boolean {
@@ -58,5 +51,13 @@ class ra3.MessageHandler {
             var f = _onExitScreen.pop();
             f();
         }
+    }
+
+    private static function bind0(o, f) {
+        return function() { return f.call(o); };
+    }
+
+    private static function bind1(o, f) {
+        return function(x) { return f.call(o, x); };
     }
 }
