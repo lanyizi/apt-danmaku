@@ -1,4 +1,4 @@
-﻿import danmaku.Component;
+import danmaku.Component;
 import danmaku.World;
 
 // 试图抄袭 Unity 的 GameObject，虽然抄得不太像（
@@ -34,7 +34,7 @@ class danmaku.GameObject {
     public function getPosition(): Object {
         return { x: _sprite._x, y: _sprite._y };
     }
-    public function setPosition(v: Object) {
+    public function setPosition(v: Object): Void {
         _sprite._x = v.x;
         _sprite._y = v.y;
     }

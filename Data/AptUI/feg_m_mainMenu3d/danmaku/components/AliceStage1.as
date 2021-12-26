@@ -99,7 +99,10 @@ class danmaku.components.AliceStage1 extends Alice {
         bullet.alpha = 32;
         bullet.alphaSpeed = 10;
         var bulletAngle = (type - 6) / 12 * Math.PI;
-        bullet.setDirection({            x: Math.cos(bulletAngle),            y: Math.sin(bulletAngle)        });
+        bullet.setDirection({
+            x: Math.cos(bulletAngle),
+            y: Math.sin(bulletAngle)
+        });
         bullet.setSpeed(10);
     }
 

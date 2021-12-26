@@ -42,6 +42,7 @@ class danmaku.Main {
             worldMovieClip.onEnterFrame = null;
         });
 
+        // 暂停按钮，以及选项菜单等
         world.onAfterNextFrame(function() {
             var sprite = overlayMovieClip.attachMovie("TextButton", "pause", 10);
             var pause: TextButton = new TextButton(sprite);

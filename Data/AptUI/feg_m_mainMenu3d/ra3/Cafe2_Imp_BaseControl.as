@@ -1,4 +1,4 @@
-class ra3.Cafe2_Imp_BaseControl extends MovieClip
+﻿class ra3.Cafe2_Imp_BaseControl extends MovieClip
 {
     static var FOCUS_DIR_LR = "Left/Right";
     static var FOCUS_DIR_UD = "Up/Down";
@@ -45,7 +45,7 @@ class ra3.Cafe2_Imp_BaseControl extends MovieClip
         this.m_handledInputs = new Object();
         this.m_cbParam = new Object();
         this.m_soundId = new Object();
-        _global.gCT.register(this);
+        // _global.gCT.register(this); <- 这会导致 RA3 一直保持对于本 Apt 的引用，导致无法热重载
         if (!m_refFM) {
             // observed from clip events
             m_refFM = "_root.gFM"
