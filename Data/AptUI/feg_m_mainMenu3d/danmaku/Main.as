@@ -8,6 +8,7 @@ import danmaku.components.Reimu;
 import danmaku.overlays.TextButton;
 import danmaku.overlays.Options;
 import danmaku.utilities.Bind;
+import danmaku.utilities.Diagnostics;
 import ra3.Lan;
 import ra3.MessageHandler;
 
@@ -19,23 +20,18 @@ class danmaku.Main {
             delete _global.ra3;
         });
 
+        var diagnostics: Diagnostics = new Diagnostics(movieClip.log);
+        // 设置写日志的函数
+        log = Bind.oneArg(diagnostics, diagnostics.log);
+
         var worldMovieClip: MovieClip = movieClip.createEmptyMovieClip("world", 100);
         var overlayMovieClip: MovieClip = movieClip.createEmptyMovieClip("overlay", 200);
         var world: World = new World(worldMovieClip, movieClip._width, movieClip._height);
 
-        var fps = NaN;
-        var previousT = getTimer();
-        var fpsCounter = 0;
         worldMovieClip.onEnterFrame = function() {
             world.update();
-            if (++fpsCounter === 15) {
-                var t = getTimer();
-                fps = 15000 / (t - previousT);
-                previousT = t;
-                fpsCounter = 0;
-                return;
-            }
-            movieClip.statistics.text = world.statistics + "\n FPS: " + fps;
+            diagnostics.updateFps();
+            movieClip.statistics.text = diagnostics.getDescription(world);
         };
         messageHandler.addOnExitScreenHandler(function() {
             world.destroyAll();
@@ -70,4 +66,6 @@ class danmaku.Main {
             reimuObject.addComponent(new Reimu());
         });
     }
+
+    public static function log(message: String): Void {}
 }
