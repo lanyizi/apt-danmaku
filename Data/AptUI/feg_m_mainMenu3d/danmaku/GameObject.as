@@ -1,4 +1,4 @@
-import danmaku.Component;
+﻿import danmaku.Component;
 import danmaku.World;
 
 // 试图抄袭 Unity 的 GameObject，虽然抄得不太像（
