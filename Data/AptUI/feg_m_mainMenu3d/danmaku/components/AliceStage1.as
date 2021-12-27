@@ -31,29 +31,23 @@ class danmaku.components.AliceStage1 extends Alice {
         }
     }
 
-    private function update(): Void {
+    private function aliceUpdate(): Void {
         ++_t;
-        if (hitpoint > 0) {
-            setPosition();
-            if (_reimu && _reimu.gameObject()) {
-                ++_bulletType;
-                var fire = true;
-                switch (_difficulty) {
-                    case Game.EASY:
-                        fire = (_bulletType % 6) === 0;
-                        break;
-                    case Game.NORMAL:
-                        fire = (_bulletType % 12) === 0;
-                        break;
-                }
-                updateSpawner(_spawners[0], 0, fire);
-                updateSpawner(_spawners[1], 1, fire);
-                updateSpawner(_spawners[2], 2, fire);
+        setPosition();
+        if (_reimu && _reimu.gameObject()) {
+            ++_bulletType;
+            var fire = true;
+            switch (_difficulty) {
+                case Game.EASY:
+                    fire = (_bulletType % 6) === 0;
+                    break;
+                case Game.NORMAL:
+                    fire = (_bulletType % 12) === 0;
+                    break;
             }
-            _healthBar.showHealth(hitpoint / _maxHitpont);
-        }
-        else {
-            toNextStage();
+            updateSpawner(_spawners[0], 0, fire);
+            updateSpawner(_spawners[1], 1, fire);
+            updateSpawner(_spawners[2], 2, fire);
         }
     }
 

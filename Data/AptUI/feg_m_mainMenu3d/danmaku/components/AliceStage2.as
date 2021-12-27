@@ -18,17 +18,12 @@ class danmaku.components.AliceStage2 extends Alice {
         _transitionTime = 0;
     }
 
-    private function update(): Void {
-        if (hitpoint > 0) {
-            setPosition();
-            if (_reimu && _reimu.gameObject()) {
-                fire();
-            }
-            _healthBar.showHealth(hitpoint / _maxHitpont);
+    private function aliceUpdate(): Void {
+        setPosition();
+        if (_reimu && _reimu.gameObject()) {
+            fire();
         }
-        else {
-            toNextStage();
-        }
+        _healthBar.showHealth(hitpoint / _maxHitpont);
     }
 
     private function fire(): GameObject {
