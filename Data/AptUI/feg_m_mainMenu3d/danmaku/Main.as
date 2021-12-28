@@ -51,7 +51,13 @@ class danmaku.Main {
             alice.getNextLevel = function() { return levels.shift(); };
 
             var reimuObject = world.instantiate("Reimu");
-            reimuObject.addComponent(new PlayerControl(movieClip.mouseClickChecker));
+            var mouseButton: Button = movieClip.mouseClickChecker;
+            var playerControl: PlayerControl = new PlayerControl(mouseButton);
+            playerControl.topEdge = (768 - 720) / 2;
+            playerControl.bottomEdge = 720 + (768 - 720) / 2;
+            playerControl.leftEdge = (1366 - 900) / 2;
+            playerControl.rightEdge = 900 + (1366 - 900) / 2;
+            reimuObject.addComponent(playerControl);
             reimuObject.addComponent(new Reimu());
         });
 

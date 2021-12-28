@@ -14,6 +14,10 @@ class danmaku.components.PlayerControl extends Component {
     private var _previousDx: Number;
     private var _slowMode: Boolean;
     public var slowMode: Number;
+    public var topEdge: Number;
+    public var bottomEdge: Number;
+    public var leftEdge: Number;
+    public var rightEdge: Number;
 
     public function PlayerControl(button: Button) {
         super();
@@ -21,6 +25,10 @@ class danmaku.components.PlayerControl extends Component {
         _previousDx = 0;
         _slowMode = false;
         slowMode = 0;
+        topEdge = 0;
+        bottomEdge = 0;
+        leftEdge = 0;
+        rightEdge = 0;
         _button.onPress = Bind.noArg(this, function() {
             _slowMode = true;
         });
@@ -91,6 +99,8 @@ class danmaku.components.PlayerControl extends Component {
 
         p.x += dx;
         p.y += dy;
+        p.x = Math.min(Math.max(leftEdge, p.x), rightEdge);
+        p.y = Math.min(Math.max(topEdge, p.y), bottomEdge);
         _self.setPosition(p);
     }
 }
