@@ -4,8 +4,6 @@ import danmaku.utilities.Bind;
 // 存放并管理游戏里所有的 GameObject
 // 并在每帧调用各种需要的函数、运行游戏逻辑
 class danmaku.World {
-    public static var test: MovieClip;
-
     private var _movieClip: MovieClip;
     private var _width: Number;
     private var _height: Number;
@@ -35,51 +33,6 @@ class danmaku.World {
     public function movieClip(): MovieClip { return _movieClip; }
     public function width(): Number { return _width; }
     public function height(): Number { return _height; }
-
-    // 用来在屏幕上打 log 的临时函数（
-    private var _logs: Array = [];
-    public function log(s: String): Void {
-        if (s.charAt(0) === '$') {
-            for (var i = 0; !!_movieClip._parent["localize" + i]; ++i) {
-                if (_movieClip._parent["localize" + i].text.length == 0) {
-                    _movieClip._parent["localize" + i].text = s;
-                    return;
-                }
-            }
-            for (var i = 0; !!_movieClip._parent["localize" + i]; ++i) {
-                _movieClip._parent["localize" + i].text = "";
-            }
-            _movieClip._parent.localize0.text = s;
-            return;
-        }
-        for (var i = 1; i < 6; ++i) {
-            var t: Number = _logs.length - i;
-            if (t < 0) {
-                break;
-            }
-            if (_logs[t].text === s) {
-                ++_logs[t].count;
-                s = null;
-            }
-        }
-        if (s) {
-            _logs.push({ text: s, count: 1 });
-        }
-        var r: String = "";
-        for (var i = 0; i < _logs.length; ++i) {
-            r += _logs[i].text;
-            if (_logs[i].count > 1) {
-                r += " (";
-                r += _logs[i].count;
-                r += ")";
-            }
-            r += "; ";
-        }
-        if (r.length > 6000) {
-            _logs = _logs.slice(Math.floor(_logs.length / 2));
-        }
-        _movieClip._parent.log.text = r;
-    }
 
     // 需要在每帧调用以执行各种游戏逻辑
     public function update(): Void {
