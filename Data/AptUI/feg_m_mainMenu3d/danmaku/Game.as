@@ -7,7 +7,6 @@ class danmaku.Game {
     private static var _instance: Game;
     public var difficulty: Number;
     public var fighting: Boolean;
-    public var chatProgress: String;
 
     public function Game() {
         difficulty = BRUTAL;
@@ -26,7 +25,6 @@ class danmaku.Game {
         if (!_instance) {
             _instance = new Game();
             retrieveRawData(_instance, "game");
-            _instance.fighting = true;
         }
         return _instance;
     }

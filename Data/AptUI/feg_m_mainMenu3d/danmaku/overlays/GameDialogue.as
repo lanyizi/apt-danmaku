@@ -8,6 +8,7 @@ class danmaku.overlays.GameDialogue {
     private var _character: MovieClip;  // 显示立绘
     private var _title: TextField;      // 对话标题
     private var _text: TextField;       // 显示对话
+    private var _hint: TextField;       // 显示操作提示
     private var _hitRegion: Button;     // 供玩家点击
     private var _step: Number;          // 当前对话序号
     private var _finished: Boolean;     // 对话是否已经放完
@@ -20,6 +21,7 @@ class danmaku.overlays.GameDialogue {
         _character = _sprite.character;
         _title = _sprite.title;
         _text = _sprite.text;
+        _hint = _sprite.hint;
         _hitRegion = _sprite.hitRegion;
         _step = -1;
         _finished = false;
@@ -46,11 +48,14 @@ class danmaku.overlays.GameDialogue {
     private function startSwitch(): Void {
         // 已经正在切换画面的话
         if (_currentAction) {
-            // 就不允许在中途又淡出了
+            // 就加速切换
+            _currentTimer = 0;
             return;
         }
         _currentTimer = FADE_TIME;
         _currentAction = Bind.noArg(this, fadeOut);
+        // 隐藏提示
+        _hint._visible = false;
     }
 
     // 淡出当前画面
@@ -86,7 +91,7 @@ class danmaku.overlays.GameDialogue {
     // 加载下一个画面
     private function loadNext(): Void {
         ++_step;
-        _currentTimer = 0;
+        _currentTimer = FADE_TIME;
         var current = _data[_step];
         if (current.character) {
             // 切换到有着相应人物立绘的帧
@@ -102,9 +107,9 @@ class danmaku.overlays.GameDialogue {
 
     // 开始淡入新的画面
     private function fadeIn(): Void {
-        if (_currentTimer < FADE_TIME) {
-            ++_currentTimer;
-            var percentage = _currentTimer * 100 / FADE_TIME;
+        if (_currentTimer > 0) {
+            --_currentTimer;
+            var percentage = (FADE_TIME - _currentTimer) * 100 / FADE_TIME;
             var first = _step === 0;
             var current = _data[_step];
             if (first || current.character !== _data[_step - 1].character) {
@@ -115,7 +120,7 @@ class danmaku.overlays.GameDialogue {
             }
             if (current.text) {
                 var t: String = current.text;
-                var length = _currentTimer * t.length / FADE_TIME;
+                var length = percentage * t.length / 100;
                 length = Math.min(Math.max(0, Math.floor(length)), t.length);
                 danmaku.Main.log("Length: " + length);
                 // 开始显示文字
