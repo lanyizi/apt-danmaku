@@ -49,11 +49,11 @@ class danmaku.components.Reimu extends Character {
                 var bullet: Bullet = bulletObject.addComponent(new Bullet());
                 bullet.setLength(52);
                 bullet.radius = 3;
-                bullet.setSpeed(45);
+                bullet.setSpeed(50);
                 bullet.life = 40;
 
                 bullet.target = _alice;
-                bullet.damage = 10;
+                bullet.damage = 15;
 
                 bullet.alpha = 0;
                 bullet.maxAlpha = 64;

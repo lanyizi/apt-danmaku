@@ -8,17 +8,15 @@ class danmaku.components.AliceStage1 extends Alice {
     private var _bulletType: Number;
     private var _t: Number;
     private var _positionTime: Number;
-    private var _scale: Number;
-    private var _transitionTime: Number;
+    private var _displacement: Number;
     private var _spawners: Array;
 
     public function AliceStage1() {
-        super(200, 10);
+        super(250, 10);
         _bulletType = 0;
         _t = 0;
         _positionTime = 15;
-        _scale = 170;
-        _transitionTime = 0;
+        _displacement = 170;
         _spawners = [];
     }
 
@@ -39,10 +37,10 @@ class danmaku.components.AliceStage1 extends Alice {
             var fire = true;
             switch (_difficulty) {
                 case Game.EASY:
-                    fire = (_bulletType % 6) === 0;
+                    fire = (_bulletType % 3) !== 0;
                     break;
                 case Game.NORMAL:
-                    fire = (_bulletType % 12) === 0;
+                    fire = (_bulletType % 4) !== 0;
                     break;
             }
             updateSpawner(_spawners[0], 0, fire);
@@ -101,7 +99,6 @@ class danmaku.components.AliceStage1 extends Alice {
     }
 
     private function setPosition(): Void {
-        var scale = 170;
         if(_t % 180 > 60) {
             return;
         }
@@ -109,8 +106,8 @@ class danmaku.components.AliceStage1 extends Alice {
         var px = Math.cos(Math.PI * t / 30);
         var py = Math.sin(Math.PI * t / 30) * px;
         _self.setPosition({
-            x: _initialPosition.x + px * scale,
-            y: _initialPosition.y + py * scale
+            x: _initialPosition.x + px * _displacement,
+            y: _initialPosition.y + py * _displacement
         });
     }
 }
