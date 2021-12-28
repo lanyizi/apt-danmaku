@@ -1,4 +1,5 @@
 ﻿import danmaku.World;
+import danmaku.utilities.Bind;
 
 // 用于调试
 class danmaku.utilities.Diagnostics {
@@ -18,6 +19,7 @@ class danmaku.utilities.Diagnostics {
         logLimit = 6000;
     }
 
+    // 没有用的，getTimer() 是假的……
     public function updateFps(): Number {
         ++_fpsCounter;
         if (_fpsCounter === 15) {
@@ -34,7 +36,8 @@ class danmaku.utilities.Diagnostics {
         var desc = (world.statistics + "\n");
         var roundedFps = Math.round(_fps * 10);
         roundedFps = Math.floor(roundedFps / 10) + "." + (roundedFps % 10);
-        desc += ("FPS: " + roundedFps + "\n");
+        // 没有用的，getTimer() 是假的，这样算出来的 FPS 也是假的……
+        // desc += ("FPS: " + roundedFps + "\n");
         var mc: MovieClip = world.movieClip();
         desc += ("Mouse: " + mc._xmouse + ", " + mc._ymouse + "\n");
         return desc;
