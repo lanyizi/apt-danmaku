@@ -17,3 +17,4 @@
 - Apt 的文本布局比较坑，至少在尝试使用 ActionScript 调整它的时候是这样的
     它与 Flash 里的不太一样，此外 Apt 的 TextFormat 缺失 getTextExtent 方法
     人生苦短，还是直接按照像素把它们写死吧，反正又不需要搞移动端适配啥的，写死像素在游戏里并不会出问题（
+- 在 Apt 里使用 new Date() 会崩游戏

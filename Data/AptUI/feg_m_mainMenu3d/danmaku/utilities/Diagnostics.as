@@ -32,7 +32,8 @@ class danmaku.utilities.Diagnostics {
 
     public function getDescription(world: World): String {
         var desc = (world.statistics + "\n");
-        var roundedFps = Math.round(_fps * 10) / 10;
+        var roundedFps = Math.round(_fps * 10);
+        roundedFps = Math.floor(roundedFps / 10) + "." + (roundedFps % 10);
         desc += ("FPS: " + roundedFps + "\n");
         var mc: MovieClip = world.movieClip();
         desc += ("Mouse: " + mc._xmouse + ", " + mc._ymouse + "\n");

@@ -33,11 +33,6 @@ class danmaku.components.PlayerControl extends Component {
         _options = Options.instance();
         _worldMovie = _world.movieClip();
         _selfSprite = _self.sprite();
-
-        _button._x = -_world.width();
-        _button._y = -_world.height();
-        _button._width = _world.width() * 4;
-        _button._height = _world.height() * 4;
     }
 
     private function update(): Void {

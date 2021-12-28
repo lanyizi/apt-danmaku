@@ -42,6 +42,7 @@ class danmaku.Main {
         // 初始化选项菜单以及暂停按钮等
         showStartOptions(world, overlayMovieClip);
 
+        // 创建角色
         world.onAfterNextFrame(function() {
             var aliceObject = world.instantiate("Alice");
             var levels: Array = [new AliceStage1(), new AliceStage2()];
@@ -93,15 +94,15 @@ class danmaku.Main {
     // 显示游戏开始之前的对话
     private static function showInitialDialogue(world: World, overlay: MovieClip): Void {
         var sprite = overlay.attachMovie("GameDialogue", "dialog", 50);
-        sprite._x = 640;
-        sprite._y = 360;
+        sprite._x = 683;
+        sprite._y = 384;
         var dialog: GameDialogue = new GameDialogue(sprite, [
             { title: "博丽灵梦", character: "reimuNormal", text: "爱丽丝！" },
             { title: "爱丽丝·玛格特洛依德", character: "alice", text: "灵梦？这么晚了来找我有什么事吗" },
             { title: "灵梦", character: "reimuAngry", text: "你在偷偷研究什么危险的东西吧，什么“人工智能”人偶！" },
             { title: "爱丽丝", character: "alice", text: "什么嘛 看来不是来找我的啊。\n可先不管你说的是哪种人偶，我作为一个人偶使，研究人偶难道有什么问题吗？" },
             { title: "灵梦", character: "reimuAngry", text: "看来直接承认了呢！这么危险的东西，要是脱离了控制的话会引发大危机的！" },
-            { title: "爱丽丝", character: "alice", text: "我好像知道灵梦的想的是什么了，当然不是那种事情" },
+            { title: "爱丽丝", character: "alice", text: "我好像知道灵梦的想的是什么了，当然不是你想的那样哦，不妨来亲自看一看吧！" },
             { title: "灵梦", character: "reimuAngry", text: "看来只能由我亲自把爱丽丝的人偶给拆光了呢！" }
         ]);
         world.addOnFrameListener("dialog1", function() {
