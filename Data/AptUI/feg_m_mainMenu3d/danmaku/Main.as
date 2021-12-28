@@ -12,6 +12,7 @@ import danmaku.utilities.Bind;
 import danmaku.utilities.Diagnostics;
 import ra3.Lan;
 import ra3.MessageHandler;
+import ra3.GameSound;
 
 class danmaku.Main {
     public static function initialize(movieClip: MovieClip): Void {
@@ -53,6 +54,9 @@ class danmaku.Main {
             reimuObject.addComponent(new PlayerControl(movieClip.mouseClickChecker));
             reimuObject.addComponent(new Reimu());
         });
+
+        // 播放音乐
+        GameSound.play("AyakashiSet05TheDollMakerOfBucuresti", 4 * 60 + 40);
     }
 
     // 游戏开始之前，先显示选单
@@ -105,6 +109,11 @@ class danmaku.Main {
             { title: "爱丽丝", character: "alice", text: "我好像知道灵梦的想的是什么了，当然不是你想的那样哦，不妨来亲自看一看吧！" },
             { title: "灵梦", character: "reimuAngry", text: "看来只能由我亲自把爱丽丝的人偶给拆光了呢！" }
         ]);
+        dialog.onStepChanged = function(step) {
+            if (step === 5) {
+                GameSound.play("AyakashiSet06DollJudgementTruncated", 4 * 60 + 53)
+            }
+        }
         world.addOnFrameListener("dialog1", function() {
             dialog.update();
             if (dialog.isFinished()) {

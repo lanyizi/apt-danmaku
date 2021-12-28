@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<AssetDeclaration xmlns="uri:ea.com:eala:asset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Tags></Tags>
+    <Includes>
+        <Include type="instance" source="DATA:Sounds/BaseSoundEffect.xml" />
+    </Includes>
+
+    <!-- Defaults for Mission Dialogue. Derive Mission Dialogue from this one -->
+    <AudioEvent id="ModBaseMissionDialogue" inheritFrom="AudioEvent:BaseSoundEffect"
+        Volume="110"
+        MinVolume="100"
+        Limit="1"
+        Type="WORLD PLAYER"
+        Priority="CRITICAL"
+        SubmixSlider="VOICE"
+        Control="FADE_ON_KILL" >
+        <VolumeSliderMultiplier Slider="VOICE" Multiplier="0.4" />
+        <VolumeSliderMultiplier Slider="SOUNDFX" Multiplier="0.7" />
+        <VolumeSliderMultiplier Slider="MUSIC" Multiplier="0.7" />
+        <VolumeSliderMultiplier Slider="AMBIENT" Multiplier="0.7" />
+    </AudioEvent>
+
+    <AudioFile
+        id="AyakashiSet05TheDollMakerOfBucuresti"
+        File="AyakashiSet05TheDollMakerOfBucuresti.wav"
+        GUIPreset="Default"
+        PCCompression="XAS"
+        IsStreamedOnPC="false" />
+    <AudioEvent id="AyakashiSet05TheDollMakerOfBucuresti" inheritFrom="AudioEvent:ModBaseMissionDialogue">
+        <Sound>AyakashiSet05TheDollMakerOfBucuresti</Sound>
+    </AudioEvent>
+
+    <AudioFile
+        id="AyakashiSet06DollJudgementTruncated"
+        File="AyakashiSet06DollJudgementTruncated.wav"
+        GUIPreset="Default"
+        PCCompression="XAS"
+        IsStreamedOnPC="false" />
+    <AudioEvent id="AyakashiSet06DollJudgementTruncated" inheritFrom="AudioEvent:ModBaseMissionDialogue">
+        <Sound>AyakashiSet06DollJudgementTruncated</Sound>
+    </AudioEvent>
+</AssetDeclaration>

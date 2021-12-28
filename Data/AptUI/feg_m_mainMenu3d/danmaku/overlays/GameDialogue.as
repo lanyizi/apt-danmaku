@@ -16,6 +16,9 @@ class danmaku.overlays.GameDialogue {
     private var _currentTimer: Number;
     private var _currentAction: Function;
 
+    // 在切换画面时被调用的，可选的，回调函数，参数是新的画面的序号
+    public var onStepChanged: Function;
+
     public function GameDialogue(sprite: MovieClip, data: Array) {
         _sprite = sprite;
         _character = _sprite.character;
@@ -103,6 +106,11 @@ class danmaku.overlays.GameDialogue {
         }
         _text.text = "";
         _currentAction = fadeIn;
+
+        // 调用回调函数
+        if (onStepChanged) {
+            onStepChanged(_step);
+        }
     }
 
     // 开始淡入新的画面
