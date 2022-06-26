@@ -3,6 +3,7 @@ import danmaku.World;
 import danmaku.components.Alice;
 import danmaku.components.AliceStage1;
 import danmaku.components.AliceStage2;
+import danmaku.components.AliceStage3;
 import danmaku.components.PlayerControl;
 import danmaku.components.Reimu;
 import danmaku.overlays.GameDialogue;
@@ -26,6 +27,11 @@ class danmaku.Main {
         // 设置写日志的函数
         log = Bind.oneArg(diagnostics, diagnostics.log);
 
+        // 把通讯星给扔了！
+        log("Gloabl comlink: " + _global.comLink);
+        _global.comLink._y = -100;
+        Mouse.hide();
+
         var worldMovieClip: MovieClip = movieClip.createEmptyMovieClip("world", 100);
         var overlayMovieClip: MovieClip = movieClip.createEmptyMovieClip("overlay", 200);
         var world: World = new World(worldMovieClip, movieClip._width, movieClip._height);
@@ -46,7 +52,7 @@ class danmaku.Main {
         // 创建角色
         world.onAfterNextFrame(function() {
             var aliceObject = world.instantiate("Alice");
-            var levels: Array = [new AliceStage1(), new AliceStage2()];
+            var levels: Array = [[new AliceStage1(), new AliceStage2(), new AliceStage3()];
             var alice: Alice = aliceObject.addComponent(new Alice(0, 0));
             alice.getNextLevel = function() { return levels.shift(); };
 
