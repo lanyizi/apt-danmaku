@@ -15,6 +15,6 @@ class danmaku.components.DynamicBullet extends Bullet {
         if (life > 0) {
             fnT(++_t);
         }
-        return super.update();
+        super.update();
     }
 }
