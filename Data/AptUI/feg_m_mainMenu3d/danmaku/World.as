@@ -71,6 +71,7 @@ class danmaku.World {
     }
 
     // 创建一个新的 GameObject
+    // movieClipId 是必须的参数，将会根据这个 id 来创建
     public function instantiate(movieClipId: String, depth: Number): GameObject {
         // 在 Flash 里，depth 不仅用于排列顺序，而且还起到了某种类似于 ID 的作用
         // 可是好多 depth 相关的 API 在 Apt 里都没有，因此需要手动管理一下（
