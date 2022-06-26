@@ -55,7 +55,8 @@ class danmaku.components.AliceStage1 extends Alice {
         spawner.setSpeed(0);
         spawner.expireSpeed = 0;
         spawner.owner = this;
-        spawner.scale = 2;
+        spawner.xScale = 2;
+        spawner.yScale = 2;
         spawner.alpha = 0;
         spawner.alphaSpeed = 10;
         spawner.maxAlpha = 70;

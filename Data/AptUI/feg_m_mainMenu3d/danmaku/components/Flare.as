@@ -13,7 +13,8 @@ class danmaku.components.Flare extends Component {
     public var expireSpeed: Number;
     public var life: Number;
     public var owner: Character;
-    public var scale: Number;
+    public var xScale: Number;
+    public var yScale: Number;
     public var alpha: Number;       // Value to be set toMovieClip._alpha
     public var alphaSpeed: Number;  // Value to be added to this.alpha
     public var maxAlpha: Number;
@@ -29,7 +30,8 @@ class danmaku.components.Flare extends Component {
         _exploded = false;
         expireSpeed = 1;
         life = 30;
-        scale = 1;
+        xScale = 1;
+        yScale = 1;
         alpha = 100;
         alphaSpeed = 0;
         maxAlpha = 100;
@@ -66,16 +68,16 @@ class danmaku.components.Flare extends Component {
     }
 
     private function start(): Void {
-        _sprite._xscale = scale * 100;
-        _sprite._yscale = scale * 100;
+        _sprite._xscale = xScale * 100;
+        _sprite._yscale = yScale * 100;
         _self.updateInitialPosition();
     }
 
     private function update(): Void {
         if (alpha < maxAlpha) {
             alpha += alphaSpeed;
-            _sprite._alpha = alpha;
         }
+        _sprite._alpha = alpha;
         var p = _self.getPosition();
         // Calculate new coordinates
         p.x = p.x + _vx;
@@ -109,8 +111,8 @@ class danmaku.components.Flare extends Component {
         }
         else {
             _sprite._alpha = factor;
-            _sprite._xscale = scale * factor;
-            _sprite._yscale = scale * factor;
+            _sprite._xscale = xScale * factor;
+            _sprite._yscale = yScale * factor;
         }
     }
 
