@@ -21,15 +21,24 @@ class danmaku.components.Bullet extends Flare {
 
     public function setDirection(d: Object) {
         super.setDirection(d);
-        _ex = _dx * _length;
-        _ey = _dy * _length;
+        var sign: Number = _speed >= 0 ? 1 : -1;
+        _ex = _dx * sign * _length;
+        _ey = _dy * sign * _length;
+    }
+
+    public function setSpeed(s: Number) {
+        super.setSpeed(s);
+        var sign: Number = _speed >= 0 ? 1 : -1;
+        _ex = _dx * sign * _length;
+        _ey = _dy * sign * _length;
     }
 
     public function getLength(): Number { return _length; }
     public function setLength(l: Number) {
         _length = l;
-        _ex = _dx * _length;
-        _ey = _dy * _length;
+        var sign: Number = _speed >= 0 ? 1 : -1;
+        _ex = _dx * sign * _length;
+        _ey = _dy * sign * _length;
     }
 
     private function lateUpdate(): Void {
