@@ -10,7 +10,7 @@ class danmaku.overlays.Options {
     // 难度
     private var _difficulties: Object; // 这个对象包含下面这四个按钮，方便遍历
     private var _easy: TextButton;
-    private var _medium: TextButton;
+    private var _normal: TextButton;
     private var _hard: TextButton;
     private var _brutal: TextButton;
     // 各种其他按钮
@@ -53,7 +53,7 @@ class danmaku.overlays.Options {
             _difficulties[name] = button;
         });
         getDifficulty("easy");
-        getDifficulty("medium");
+        getDifficulty("normal");
         getDifficulty("hard");
         getDifficulty("brutal");
         updateSelectedDifficulty();

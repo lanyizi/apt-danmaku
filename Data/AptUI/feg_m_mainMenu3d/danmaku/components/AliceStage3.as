@@ -38,11 +38,9 @@ class danmaku.components.AliceStage3 extends Alice {
             var numberOfLasers: Number = 16;
             switch (_difficulty) {
                 case Game.EASY:
-                    fire = (_bulletType % 3) !== 0;
                     numberOfLasers = 4;
                     break;
                 case Game.NORMAL:
-                    fire = (_bulletType % 4) !== 0;
                     numberOfLasers = 8;
                     break;
                 case Game.HARD:
@@ -63,8 +61,8 @@ class danmaku.components.AliceStage3 extends Alice {
     private function fireLaser(): Void {
         var positions: Array = [
             [0, 0],
-            [-80, -50],
-            [+80, -50],
+            [-80, -60],
+            [+80, -60],
             [+50, +10],
             [-50, +10]
         ];
@@ -81,16 +79,16 @@ class danmaku.components.AliceStage3 extends Alice {
         var angle: Number = (angles[i % angles.length] + 90) / 180 * Math.PI;
         var direction: Object = { x: Math.cos(angle), y: Math.sin(angle) };
         laserWarning.setDirection(direction);
-        laserWarning.life = 15;
+        laserWarning.life = 30;
         laserWarning.laserId = "BlueLaser";
         laserWarning.owner = this;
         laserWarning.onLaserCreated = Bind.oneArg(this, function(laser: Laser): Void {
-            createSpawner(position, direction, i % 2 == 0);
             laser.xScale = 1;
             laser.yScale = 1;
             laser.setLength(1000);
             laser.target = _reimu;
         });
+        createSpawner(position, direction, i % 2 == 0);
     }
 
     private function createSpawner(position: Object, direction: Object, upward: Boolean): Bullet {
@@ -99,12 +97,17 @@ class danmaku.components.AliceStage3 extends Alice {
         var spawner: DynamicBullet = spawnerObject.addComponent(new DynamicBullet());
         spawner.setSpeed(0);
         spawner.owner = this;
+        spawner.life = 60;
         spawner.xScale = 2;
         spawner.yScale = 2;
         spawner.alpha = 0;
         spawner.alphaSpeed = 10;
         spawner.maxAlpha = 70;
         spawner.fnT = Bind.oneArg(this, function(t) {
+            t = t - 30;
+            if (t < 0) {
+                return;
+            }
             if (t % 3 !== 2) {
                 return;
             }
@@ -117,8 +120,8 @@ class danmaku.components.AliceStage3 extends Alice {
             if (upward) {
                 bulletObject = _world.instantiate("RedBullet");
                 var dynamicBullet: DynamicBullet = bulletObject.addComponent(new DynamicBullet());
-                direction.y = -1;
-                direction.x = Math.sin(t);
+                direction.y = -2;
+                direction.x = Math.sin(_t) * 2;
                 dynamicBullet.setDirection(direction);
                 dynamicBullet.setSpeed(10);
                 dynamicBullet.fnT = function() {
@@ -138,7 +141,7 @@ class danmaku.components.AliceStage3 extends Alice {
                 bullet.setDirection(direction)
             }
             bulletObject.setPosition(position);
-            bullet.life = 90;
+            bullet.life = 120;
             bullet.radius = 9;
             bullet.owner = this;
             bullet.target = _reimu;

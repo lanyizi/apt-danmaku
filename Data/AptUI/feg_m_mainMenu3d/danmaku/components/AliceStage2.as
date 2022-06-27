@@ -33,17 +33,22 @@ class danmaku.components.AliceStage2 extends Alice {
         setPosition();
         if (_reimu && _reimu.gameObject()) {
             ++_bulletType;
-            var fire = true;
+            var fire1 = true;
+            var fire2 = true;
             switch (_difficulty) {
                 case Game.EASY:
-                    fire = (_bulletType % 3) !== 0;
+                    fire1 = (_bulletType % 3) === 1;
+                    fire2 = (_bulletType % 3) === 2;
                     break;
                 case Game.NORMAL:
-                    fire = (_bulletType % 4) !== 0;
+                    fire1 = fire2 = (_bulletType % 3) !== 0;
+                    break;
+                case Game.HARD:
+                    fire1 = fire2 = (_bulletType % 5) !== 0;
                     break;
             }
-            updateSpawner(_spawners[0], 0, fire);
-            updateSpawner(_spawners[1], 1, fire);
+            updateSpawner(_spawners[0], 0, fire1);
+            updateSpawner(_spawners[1], 1, fire2);
         }
     }
 

@@ -1,4 +1,4 @@
-import danmaku.Game;
+﻿import danmaku.Game;
 import danmaku.World;
 import danmaku.components.Alice;
 import danmaku.components.AliceStage1;
@@ -15,6 +15,9 @@ import danmaku.utilities.Diagnostics;
 import ra3.Lan;
 import ra3.MessageHandler;
 import ra3.GameSound;
+/*Sketchfab
+vavedet760@sinagalore.com
+Pi=3.1415926*/
 
 class danmaku.Main {
     public static function initialize(movieClip: MovieClip): Void {
