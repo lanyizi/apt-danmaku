@@ -52,7 +52,7 @@ class danmaku.Main {
         // 创建角色
         world.onAfterNextFrame(function() {
             var aliceObject = world.instantiate("Alice");
-            var levels: Array = [[new AliceStage1(), new AliceStage2(), new AliceStage3()];
+            var levels: Array = [new AliceStage1(), new AliceStage2(), new AliceStage3()];
             var alice: Alice = aliceObject.addComponent(new Alice(0, 0));
             alice.getNextLevel = function() { return levels.shift(); };
 
