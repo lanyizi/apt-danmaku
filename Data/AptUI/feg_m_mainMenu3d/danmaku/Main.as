@@ -6,6 +6,7 @@ import danmaku.components.AliceStage2;
 import danmaku.components.AliceStage3;
 import danmaku.components.PlayerControl;
 import danmaku.components.Reimu;
+import danmaku.overlays.Border;
 import danmaku.overlays.GameDialogue;
 import danmaku.overlays.TextButton;
 import danmaku.overlays.Options;
@@ -33,6 +34,7 @@ class danmaku.Main {
         Mouse.hide();
 
         var worldMovieClip: MovieClip = movieClip.createEmptyMovieClip("world", 100);
+        var borderMovieClip: MovieClip = movieClip.createEmptyMovieClip("border", 50);
         var overlayMovieClip: MovieClip = movieClip.createEmptyMovieClip("overlay", 200);
         var world: World = new World(worldMovieClip, movieClip._width, movieClip._height);
 
@@ -65,6 +67,9 @@ class danmaku.Main {
             playerControl.rightEdge = 900 + (1366 - 900) / 2;
             reimuObject.addComponent(playerControl);
             reimuObject.addComponent(new Reimu());
+
+            // 创建边框
+            var border: Border = new Border(borderMovieClip, playerControl);
         });
 
         // 播放音乐
