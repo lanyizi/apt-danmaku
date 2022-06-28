@@ -8,6 +8,7 @@ import danmaku.components.LaserWarning;
 import danmaku.utilities.Bind;
 
 class danmaku.components.AliceStage3 extends Alice {
+    public static var LASER_DELAY = 20;
     private var _bulletType: Number;
     private var _t: Number;
     private var _positionTime: Number;
@@ -16,7 +17,7 @@ class danmaku.components.AliceStage3 extends Alice {
     private var _lastFire: Number;
 
     public function AliceStage3() {
-        super(400, 10);
+        super(600, 10);
         _bulletType = 0;
         _t = 0;
         _positionTime = 0;
@@ -79,7 +80,7 @@ class danmaku.components.AliceStage3 extends Alice {
         var angle: Number = (angles[i % angles.length] + 90) / 180 * Math.PI;
         var direction: Object = { x: Math.cos(angle), y: Math.sin(angle) };
         laserWarning.setDirection(direction);
-        laserWarning.life = 30;
+        laserWarning.life = LASER_DELAY;
         laserWarning.laserId = "BlueLaser";
         laserWarning.owner = this;
         laserWarning.onLaserCreated = Bind.oneArg(this, function(laser: Laser): Void {
@@ -104,7 +105,7 @@ class danmaku.components.AliceStage3 extends Alice {
         spawner.alphaSpeed = 10;
         spawner.maxAlpha = 70;
         spawner.fnT = Bind.oneArg(this, function(t) {
-            t = t - 30;
+            t = t - LASER_DELAY;
             if (t < 0) {
                 return;
             }
