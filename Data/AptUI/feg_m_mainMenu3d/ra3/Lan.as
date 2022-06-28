@@ -23,6 +23,7 @@ class ra3.Lan {
     private var _logger: Function;
     private var _status: Number;
     private var _sixPlayersMaps: Array;
+    private var _burnOutParadise: Array;
     private var _rulesToBeSet: Array;
     private var _parsedMaps: Object;
     private var _allMaps: Array;
@@ -37,6 +38,7 @@ class ra3.Lan {
         _logger = logger;
         _status = INITIAL;
         _sixPlayersMaps = [];
+        _burnOutParadise = [];
         _rulesToBeSet = [];
         _parsedMaps = {};
         _allMaps = [];
@@ -182,7 +184,14 @@ class ra3.Lan {
         }
         _status = MAP_LIST_RETRIEVED;
         for (var i = 1; i <= 5; ++i) {
-            callGameFunction("%SetPlayerStatus?Slot=" + String(i) + "|Status=" + String(_difficulty));
+            var difficulty = _difficulty;
+            if (i > 1) {
+                difficulty = Math.min(4, difficulty);
+                if (i > 2) {
+                    difficulty = Math.min(3, difficulty);
+                }
+            }
+            callGameFunction("%SetPlayerStatus?Slot=" + String(i) + "|Status=" + String(difficulty));
             callGameFunction("%SetTeam?Slot=" + String(i) + "|Team=2");
         }
     }
@@ -210,6 +219,9 @@ class ra3.Lan {
             if (isSixPlayers) {
                 var isNormalMap = MapHeuristic.isNormalSixPlayersMap(positions.array);
                 _sixPlayersMaps.push(currentMap);
+                if (MapHeuristic.isBurnOutParadise(positions.array)) {
+                    _burnOutParadise.push(currentMap);
+                }
             }
         }
 
@@ -229,9 +241,15 @@ class ra3.Lan {
         _logger("No more maps");
         _status = SIX_PLAYERS_MAP_FOUND;
         var randomIndex = Math.floor(Math.random() * _sixPlayersMaps.length);
-        _logger("Starting with map = " + _sixPlayersMaps[randomIndex]);
+        var finalMap = _sixPlayersMaps[randomIndex];
+        if (_burnOutParadise.length > 0) {
+            finalMap = _burnOutParadise[0];
+        }
+        _logger("Starting with map = " + finalMap);
         callGameFunction("%ResetRules");
-        callGameFunction("%SetMap?Map=" + _sixPlayersMaps[randomIndex]);
+        callGameFunction("%SetMap?Map=" + finalMap);
+        callGameFunction("%CycleStartPositionOwner?Position=0");
+        callGameFunction("%CycleStartPositionOwner?Position=5");
         callGameFunction("%StartGame");
     }
 

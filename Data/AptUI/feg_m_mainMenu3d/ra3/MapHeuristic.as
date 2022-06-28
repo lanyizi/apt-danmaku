@@ -1,4 +1,23 @@
 class ra3.MapHeuristic {
+
+    public static function isBurnOutParadise(startPositions: Array): Boolean {
+        var table: Array = [
+            { x: 0.501199, y: 0.893535 },
+            { x: 0.294496, y: 0.740820 },
+            { x: 0.775716, y: 0.546769 },
+            { x: 0.234452, y: 0.477302 },
+            { x: 0.702504, y: 0.261562 },
+            { x: 0.496599, y: 0.092047 }
+        ];
+        var difference: Number = 0;
+        for (var i = 0; i < startPositions.length; ++i) {
+            var p = startPositions[i];
+            var q = table[i];
+            difference += calculateDistance(p.x - q.x, p.y - q.y)
+        }
+        return difference < 0.01;
+    }
+
     public static function isNormalSixPlayersMap(startPositions: Array): Boolean {
         var scores: Array = [];
         for (var i = 0; i < 6; ++i) {
@@ -168,5 +187,9 @@ class ra3.MapHeuristic {
         }
         sort(array, begin, pivotBegin);
         sort(array, pivotEnd + 1, end);
+    }
+
+    private static function calculateDistance(x, y): Number {
+        return Math.sqrt(x * x + y * y);
     }
 }
