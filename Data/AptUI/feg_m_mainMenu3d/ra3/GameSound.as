@@ -1,5 +1,6 @@
 ﻿class ra3.GameSound {
     public static function play(soundId: String, repeat: Number): Void {
+        _global.PlayShellMusic("");
         if (_global.SOUND.LAST_VO_PLAYED) {
             danmaku.Main.log("Stopping sound " + _global.SOUND.LAST_VO_PLAYED);
             _global.stopSound(_global.SOUND.LAST_VO_PLAYED);
