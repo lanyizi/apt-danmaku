@@ -21,7 +21,10 @@ class danmaku.overlays.Options {
 
     private var _closeAbout: TextButton;
 
+    private var _closeButtonText: String;
+
     public function Options(sprite: MovieClip, onClosed: Function, closeButtonText: String) {
+        _closeButtonText = closeButtonText || "开始游戏";
         _sprite = sprite;
         _sprite.onUnload = onClosed;
 
@@ -32,14 +35,14 @@ class danmaku.overlays.Options {
         // 切换之后，下一帧开始初始化选项界面
         _sprite.onEnterFrame = Bind.noArg(this, function() {
             delete _sprite.onEnterFrame;
-            initializeOptionsPanel(closeButtonText || "开始游戏");
+            initializeOptionsPanel();
         });
     }
 
     public function sprite(): MovieClip { return _sprite; }
 
     // 初始化“选项”界面
-    private function initializeOptionsPanel(closeButtonText: String): Void {
+    private function initializeOptionsPanel(): Void {
         // 初始化难度按钮
         _difficulties = {};
         var getDifficulty = Bind.oneArg(this, function(name) {
@@ -62,7 +65,7 @@ class danmaku.overlays.Options {
         getButton("exit").setText("退出游戏");
         getButton("about").setText("关于");
         getButton("settings").setText("设置");
-        getButton("play").setText(closeButtonText);
+        getButton("play").setText(_closeButtonText);
 
         _exit.onClick = function() {
             fscommand("CallGameFunction", "%ExitApplication");
