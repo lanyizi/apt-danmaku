@@ -1,9 +1,11 @@
-﻿import danmaku.components.PlayerControl;
+﻿import danmaku.components.Alice;
+import danmaku.components.PlayerControl;
+import danmaku.World;
 // 显示地图边框
 class danmaku.overlays.Border {
     private var _border: MovieClip;
 
-    public function Border(scene: MovieClip, playerControl: PlayerControl) {
+    public function Border(scene: MovieClip, playerControl: PlayerControl, world: World) {
         var border: MovieClip = scene.attachMovie("Border", "border", 100);
         /*
         红警3 Apt 的遮罩系统十分辣鸡，所以下面的这些代码没有用。
@@ -34,8 +36,12 @@ class danmaku.overlays.Border {
 
         border.onEnterFrame = function() {
             var movable: MovieClip = border.borderColor;
+            var indicator: MovieClip = border.bossIndicator;
+            var alice: Alice = world.findComponents(Alice)[0];
             movable._x = Math.max(playerControl.leftEdge, Math.min(border._xmouse, playerControl.rightEdge));
             movable._y = Math.max(playerControl.topEdge, Math.min(border._ymouse, playerControl.bottomEdge));
+            indicator._x = alice.gameObject().getPosition().x;
+            indicator._y = playerControl.bottomEdge;
         };
         _border = border;
     }

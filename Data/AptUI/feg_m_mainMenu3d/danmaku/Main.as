@@ -1,4 +1,4 @@
-﻿import danmaku.Game;
+import danmaku.Game;
 import danmaku.World;
 import danmaku.components.Alice;
 import danmaku.components.AliceStage1;
@@ -72,7 +72,7 @@ class danmaku.Main {
             reimuObject.addComponent(new Reimu());
 
             // 创建边框
-            var border: Border = new Border(borderMovieClip, playerControl);
+            var border: Border = new Border(borderMovieClip, playerControl, world);
         });
 
         // 播放音乐
