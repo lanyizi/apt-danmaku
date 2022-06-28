@@ -181,11 +181,10 @@ class ra3.Lan {
             return;
         }
         _status = MAP_LIST_RETRIEVED;
-        callGameFunction("%SetPlayerStatus?Slot=1|Status=5|Team=2");
-        callGameFunction("%SetPlayerStatus?Slot=2|Status=5|Team=2");
-        callGameFunction("%SetPlayerStatus?Slot=3|Status=5|Team=2");
-        callGameFunction("%SetPlayerStatus?Slot=4|Status=5|Team=2");
-        callGameFunction("%SetPlayerStatus?Slot=5|Status=5|Team=2");
+        for (var i = 1; i <= 5; ++i) {
+            callGameFunction("%SetPlayerStatus?Slot=" + String(i) + "|Status=" + String(_difficulty));
+            callGameFunction("%SetTeam?Slot=" + String(i) + "|Team=2");
+        }
     }
 
     private function findSixPlayersMap() {

@@ -12,12 +12,8 @@ class danmaku.components.Character extends Component {
         radius = hitRadius;
     }
 
-    public function onShot(damage: Number): Void {
+    public function onShot(damage: Number): Boolean {
         hitpoint -= damage;
-        if (hitpoint <= 0) {
-            onDie();
-        }
+        return true;
     }
-
-    public function onDie(): Void { }
 }

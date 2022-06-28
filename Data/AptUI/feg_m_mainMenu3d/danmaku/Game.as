@@ -1,16 +1,20 @@
-﻿class danmaku.Game {
+﻿import danmaku.components.Alice;
+
+class danmaku.Game {
     public static var EASY: Number = 0;
     public static var NORMAL: Number = 1;
     public static var HARD: Number = 2;
     public static var BRUTAL: Number = 3;
 
     private static var _instance: Game;
+    public var currentStage: Number;
     public var difficulty: Number;
     public var fighting: Boolean;
     public var onGameVictory: Function; // TODO: 是否需要序列化？
     public var onGameDefeat: Function;
 
     public function Game() {
+        currentStage = 0;
         difficulty = BRUTAL;
         fighting = false;
     }

@@ -122,7 +122,7 @@ class danmaku.components.AliceStage3 extends Alice {
                 bulletObject = _world.instantiate("RedBullet");
                 var dynamicBullet: DynamicBullet = bulletObject.addComponent(new DynamicBullet());
                 direction.y = -2;
-                direction.x = Math.sin(_t) * 2;
+                direction.x = Math.sin(_t + t) * 2;
                 dynamicBullet.setDirection(direction);
                 dynamicBullet.setSpeed(10);
                 dynamicBullet.fnT = function() {
@@ -131,14 +131,14 @@ class danmaku.components.AliceStage3 extends Alice {
                         direction.y += 0.1;
                         dynamicBullet.setDirection(direction);
                     }
-                    dynamicBullet.setSpeed(Math.abs(direction.y) * 10);
+                    // dynamicBullet.setSpeed(Math.abs(direction.y) * 10);
                 };
                 bullet = dynamicBullet;
             }
             else {
                 bulletObject = _world.instantiate("BlueBullet");
                 bullet = bulletObject.addComponent(new Bullet());
-                bullet.setSpeed(t * 6);
+                bullet.setSpeed((6 - t) * 6);
                 bullet.setDirection(direction)
             }
             bulletObject.setPosition(position);
@@ -160,7 +160,7 @@ class danmaku.components.AliceStage3 extends Alice {
         }
         t = _positionTime++;
         var px = Math.cos(t / 8);
-        var py = Math.sin(t / 8) * px;
+        var py = -Math.pow(Math.sin(t / 8), 2) * px;
         _self.setPosition({
             x: _initialPosition.x + px * _displacement,
             y: _initialPosition.y + py * _displacement

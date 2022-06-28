@@ -20,6 +20,28 @@
         <VolumeSliderMultiplier Slider="AMBIENT" Multiplier="0.7" />
     </AudioEvent>
 
+    <AudioEvent id="ModBaseEva" inheritFrom="AudioEvent:BaseSoundEffect"
+        Volume="150"
+        MinVolume="100"
+        Limit="1"
+        Type="WORLD PLAYER"
+        Priority="CRITICAL"
+        SubmixSlider="VOICE"
+        Control="FADE_ON_KILL" >
+        <VolumeSliderMultiplier Slider="VOICE" Multiplier="0.4" />
+        <VolumeSliderMultiplier Slider="SOUNDFX" Multiplier="0.7" />
+        <VolumeSliderMultiplier Slider="MUSIC" Multiplier="0.7" />
+        <VolumeSliderMultiplier Slider="AMBIENT" Multiplier="0.7" />
+    </AudioEvent>
+
+	<AudioEvent id="UnitUnderAttack" inheritFrom="AudioEvent:ModBaseEva">
+        <Sound>Ieva_UnitUndAttack</Sound>
+    </AudioEvent>
+
+    <AudioEvent id="UnitLost" inheritFrom="AudioEvent:ModBaseEva">
+        <Sound>Ieva_UnitLost</Sound>
+    </AudioEvent>
+
     <AudioFile
         id="AyakashiSet05TheDollMakerOfBucuresti"
         File="AyakashiSet05TheDollMakerOfBucuresti.wav"

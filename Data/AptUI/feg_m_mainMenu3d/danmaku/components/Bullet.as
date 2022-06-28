@@ -88,26 +88,30 @@ class danmaku.components.Bullet extends Flare {
         var d;
         d = distanceSegmentPoint(ppx, ppy, cpx, cpy, dpx, dpy, pqx, pqy);
         if (d <= threshold) {
-            target.onShot(damage);
-            explode();
+            if (target.onShot(damage)) {
+                explode();
+            }
             return;
         }
         d = distanceSegmentPoint(ppx, ppy, cpx, cpy, dpx, dpy, cqx, cqy);
         if (d <= threshold) {
-            target.onShot(damage);
-            explode();
+            if (target.onShot(damage)) {
+                explode();
+            }
             return;
         }
         d = distanceSegmentPoint(pqx, pqy, cqx, cqy, dqx, dqy, ppx, ppy);
         if (d <= threshold) {
-            target.onShot(damage);
-            explode();
+            if (target.onShot(damage)) {
+                explode();
+            }
             return;
         }
         d = distanceSegmentPoint(pqx, pqy, cqx, cqy, dqx, dqy, cpx, cpy);
         if (d <= threshold) {
-            target.onShot(damage);
-            explode();
+            if (target.onShot(damage)) {
+                explode();
+            }
             return;
         }
     }

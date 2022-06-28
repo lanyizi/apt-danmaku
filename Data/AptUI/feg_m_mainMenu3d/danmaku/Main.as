@@ -4,12 +4,14 @@ import danmaku.components.Alice;
 import danmaku.components.AliceStage1;
 import danmaku.components.AliceStage2;
 import danmaku.components.AliceStage3;
+import danmaku.components.Flare;
 import danmaku.components.PlayerControl;
 import danmaku.components.Reimu;
 import danmaku.overlays.Border;
 import danmaku.overlays.GameDialogue;
-import danmaku.overlays.TextButton;
 import danmaku.overlays.Options;
+import danmaku.overlays.PlayerStats;
+import danmaku.overlays.TextButton;
 import danmaku.utilities.Bind;
 import danmaku.utilities.Diagnostics;
 import ra3.Lan;
@@ -26,7 +28,7 @@ class danmaku.Main {
 
         var diagnostics: Diagnostics = new Diagnostics(movieClip.log);
         // 设置写日志的函数
-        log = Bind.oneArg(diagnostics, diagnostics.log);
+        // log = Bind.oneArg(diagnostics, diagnostics.log);
 
         // 把通讯星给扔了！
         log("Gloabl comlink: " + _global.comLink);
@@ -51,30 +53,26 @@ class danmaku.Main {
         // 初始化选项菜单以及暂停按钮等
         showStartOptions(world, overlayMovieClip);
 
+        // 创建显示生命值的 UI
+        setupPlayerStats(world, overlayMovieClip);
+
         // 创建角色
         world.onAfterNextFrame(function() {
-            var aliceObject = world.instantiate("Alice");
-            var levels: Array = [new AliceStage1(), new AliceStage2(), new AliceStage3()];
-            var alice: Alice = aliceObject.addComponent(new Alice(0, 0));
-            alice.getNextLevel = function() { return levels.shift(); };
-
-            var reimuObject = world.instantiate("Reimu");
-            var mouseButton: Button = movieClip.mouseClickChecker;
-            var playerControl: PlayerControl = new PlayerControl(mouseButton);
-            playerControl.topEdge = (768 - 720) / 2;
-            playerControl.bottomEdge = 720 + (768 - 720) / 2;
-            playerControl.leftEdge = (1366 - 900) / 2;
-            playerControl.rightEdge = 900 + (1366 - 900) / 2;
-            reimuObject.addComponent(playerControl);
-            reimuObject.addComponent(new Reimu());
-
-            // 创建边框
-            var border: Border = new Border(borderMovieClip, playerControl, world);
+            createCharacters(world, movieClip.mouseClickChecker, borderMovieClip);
         });
 
         // 在游戏结束之后执行的函数
         Game.instance().onGameVictory = function() {
             showVictoryDialogue(messageHandler, world, overlayMovieClip);
+        };
+        Game.instance().onGameDefeat = function() {
+            world.paused = true;
+            var menu = overlayMovieClip.attachMovie("Options", "menu", 200);
+            var options: Options = new Options(menu, function() {
+                createCharacters(world, movieClip.mouseClickChecker, borderMovieClip);
+                world.paused = false;
+                Game.instance().fighting = true;
+            }, "续关");
         };
 
         // 播放音乐
@@ -113,8 +111,54 @@ class danmaku.Main {
             var menu = overlay.attachMovie("Options", "menu", 200);
             var options: Options = new Options(menu, function() {
                 world.paused = false;
-            });
+            }, "继续");
         };
+        world.addOnFrameListener("updatePause", function() {
+            pause.sprite()._visible = Game.instance().fighting;
+        });
+    }
+
+    // 创建显示生命值的 UI
+    private static function setupPlayerStats(world: World, overlay: MovieClip): Void {
+        var sprite: MovieClip = overlay.attachMovie("PlayerStats", "playerStats", 300);
+        sprite._x = 900 + (1366 - 900) / 2 + 4;
+        sprite._y = 64;
+        var playerStats: PlayerStats = new PlayerStats(sprite, world);
+    }
+
+    // 创建角色
+    private static function createCharacters(world: World, mouseButton: Button, borderMovieClip: MovieClip): Void {
+        // 清除老的物体
+        var old: Array = world.findComponents(Reimu)
+            .concat(world.findComponents(Alice))
+            .concat(world.findComponents(Flare))
+        for (var i = 0; i < old.length; ++i) {
+            world.destroy(old[i].gameObject());
+        }
+
+        var aliceObject = world.instantiate("Alice");
+        var levels: Array = [new AliceStage1(), new AliceStage2(), new AliceStage3()];
+        // 支持续关
+        if (Game.instance().currentStage > 0) {
+            Game.instance().currentStage -= 1;
+        }
+        var currentStage = Game.instance().currentStage;
+        levels.splice(0, currentStage);
+        var alice: Alice = aliceObject.addComponent(new Alice(0, 0));
+        alice.getNextLevel = function() { return levels.shift(); };
+
+        var reimuObject = world.instantiate("Reimu");
+        var playerControl: PlayerControl = new PlayerControl(mouseButton);
+        playerControl.topEdge = (768 - 720) / 2;
+        playerControl.bottomEdge = 720 + (768 - 720) / 2;
+        playerControl.leftEdge = (1366 - 900) / 2;
+        playerControl.rightEdge = 900 + (1366 - 900) / 2;
+        reimuObject.addComponent(playerControl);
+        var reimu: Reimu = reimuObject.addComponent(new Reimu());
+        reimu.hitpoint = currentStage === 0 ? 7 : 3;
+
+        // 创建边框
+        var border: Border = new Border(borderMovieClip, playerControl, world);
     }
 
     // 显示游戏开始之前的对话
@@ -152,13 +196,13 @@ class danmaku.Main {
         sprite._y = 384;
         var dialog: GameDialogue = new GameDialogue(sprite, [
             { title: "爱丽丝", character: "alice", text: "行啦行啦，在 30FPS 的世界里打弹幕游戏有什么意思~" },
-            { title: "灵梦", character: "reimuAngry", text: "……咦！怎么变成 30FPS 了，以前不都是 60 FPS 的吗？" },
-            { title: "爱丽丝", character: "alice", text: "灵梦看来肯定不知道红色警戒3呢" },
+            { title: "灵梦", character: "reimuAngry", text: "怪不得总觉得有点不对劲！" },
+            { title: "爱丽丝", character: "alice", text: "灵梦看来肯定不知道红色警戒3呢~" },
             { title: "爱丽丝", character: "alice", text: "这是一款由云亼开发的即时战略游戏，大概是因为这款游戏早就死透了，所以幻想入了吧（" },
             { title: "爱丽丝", character: "alice", text: "与其互扔符卡，灵梦不如来和我的人偶们打一局红警3呀！" },
             { title: "灵梦", character: "reimuNormal", text: "……所以你那些“人工智能”人偶其实就是用来打电子游戏的吗" },
             { title: "爱丽丝", character: "alice", text: "诶~ 之前还来势汹汹的，现在怯战了吗？" },
-            { title: "灵梦", character: "reimuAngry", text: "看来被看扁了呢，哪怕是红色警戒3，我一打五也没问题！" }
+            { title: "灵梦", character: "reimuAngry", text: "看来被看扁了呢，红警3又怎样，区区人偶，我一打五也没问题！" }
         ]);
         world.addOnFrameListener("dialog2", function() {
             dialog.update();

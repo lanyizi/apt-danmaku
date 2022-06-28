@@ -31,6 +31,7 @@ class danmaku.components.Alice extends Character {
             return;
         }
         if (hitpoint > 0) {
+            _difficulty = Game.instance().difficulty;
             aliceUpdate();
             // 假如生命值大于 0，就显示血条
             _healthBar.showHealth(hitpoint / _maxHitpont);
@@ -80,6 +81,7 @@ class danmaku.components.Alice extends Character {
             self.removeComponent(this);
             self.addComponent(_nextLevel);
             _nextLevel.getNextLevel = getNextLevel;
+            Game.instance().currentStage += 1;
         }
     }
 }
