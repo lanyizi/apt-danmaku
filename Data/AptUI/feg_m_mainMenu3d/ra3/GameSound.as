@@ -26,4 +26,8 @@
             }, repeat * 1000);
         }
     }
+
+    public static function playEva(soundId: String): Void {
+        _global.playSound(soundId);
+    }
 }
