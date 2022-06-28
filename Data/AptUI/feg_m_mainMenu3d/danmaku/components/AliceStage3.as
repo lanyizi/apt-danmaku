@@ -39,7 +39,7 @@ class danmaku.components.AliceStage3 extends Alice {
             var numberOfLasers: Number = 16;
             switch (_difficulty) {
                 case Game.EASY:
-                    numberOfLasers = 4;
+                    numberOfLasers = 6;
                     break;
                 case Game.NORMAL:
                     numberOfLasers = 8;
@@ -160,7 +160,7 @@ class danmaku.components.AliceStage3 extends Alice {
         }
         t = _positionTime++;
         var px = Math.cos(t / 8);
-        var py = -Math.pow(Math.sin(t / 8), 2) * px;
+        var py = -Math.pow(Math.sin(t / 8) * px, 2);
         _self.setPosition({
             x: _initialPosition.x + px * _displacement,
             y: _initialPosition.y + py * _displacement
