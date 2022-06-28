@@ -1,4 +1,4 @@
-class danmaku.Game {
+﻿class danmaku.Game {
     public static var EASY: Number = 0;
     public static var NORMAL: Number = 1;
     public static var HARD: Number = 2;
@@ -7,6 +7,8 @@ class danmaku.Game {
     private static var _instance: Game;
     public var difficulty: Number;
     public var fighting: Boolean;
+    public var onGameVictory: Function; // TODO: 是否需要序列化？
+    public var onGameDefeat: Function;
 
     public function Game() {
         difficulty = BRUTAL;
@@ -15,10 +17,16 @@ class danmaku.Game {
 
     public function setPlayerVictorious(): Void {
         fighting = false;
+        if (onGameVictory) {
+            onGameVictory();
+        }
     }
 
     public function setPlayerDefeated(): Void {
         fighting = false;
+        if (onGameDefeat) {
+            onGameDefeat();
+        }
     }
 
     public static function instance(): Game {

@@ -30,8 +30,9 @@ class ra3.Lan {
     private var _nextMapId: String;
     private var _currentStartPositions: String;
     private var _switchMapTimeout: Number;
+    private var _difficulty: Number;
 
-    public function Lan(messageHandler: MessageHandler, logger: Function) {
+    public function Lan(messageHandler: MessageHandler, logger: Function, difficulty: Number) {
         _messageHandler = messageHandler;
         _logger = logger;
         _status = INITIAL;
@@ -51,6 +52,7 @@ class ra3.Lan {
             self.destroy();
         });
         _logger("Lan initialized");
+        _difficulty = difficulty + 2;
     }
 
     public function canCreateGame() { return _status === READY; }
@@ -76,18 +78,13 @@ class ra3.Lan {
             --_switchMapTimeout;
             if (_switchMapTimeout <= 0) {
 
-
-
                 var failedMap = _nextMapId;
-
-
 
                 _maps.push(_nextMapId); // put the failed map back
                 var randomIndex = Math.floor(Math.random() * _allMaps.length);
                 _nextMapId = _allMaps[randomIndex];
                 _switchMapTimeout = 90;
 
-                World.test.lg.buttonText.text = "Failed map: " + failedMap + "_allMaps length " + _allMaps.length + "; randomIndex: " + randomIndex + "; _next: " + _nextMapId + "; allMaps: " + _allMaps;
                 _logger("Failed map: " + failedMap + "_allMaps length " + _allMaps.length + "; randomIndex: " + randomIndex + "; _next: " + _nextMapId + "; allMaps: " + _allMaps);
 
 
@@ -184,26 +181,11 @@ class ra3.Lan {
             return;
         }
         _status = MAP_LIST_RETRIEVED;
-        callGameFunction("%SetPlayerStatus?Slot=1|Status=5");
-        callGameFunction("%SetPlayerStatus?Slot=2|Status=5");
-        callGameFunction("%SetPlayerStatus?Slot=3|Status=5");
-        callGameFunction("%SetPlayerStatus?Slot=4|Status=5");
-        callGameFunction("%SetPlayerStatus?Slot=5|Status=5");
-    }
-
-    private var MAPTEXTFIELDID = 0;
-    private var curArrIndex: Number = 0;
-    private var curButtons: Array = [];
-    private var allButtons: Array = [];
-    private function changePage(diff: Number) {
-        curArrIndex = Math.max(0, Math.min(allButtons.length, Math.round(curArrIndex + diff)));
-        for (var i = 0; i < curButtons.length; ++i) {
-            curButtons[i]._visible = false;
-        }
-        curButtons = allButtons[curArrIndex];
-        for (var i = 0; i < curButtons.length; ++i) {
-            curButtons[i]._visible = true;
-        }
+        callGameFunction("%SetPlayerStatus?Slot=1|Status=5|Team=2");
+        callGameFunction("%SetPlayerStatus?Slot=2|Status=5|Team=2");
+        callGameFunction("%SetPlayerStatus?Slot=3|Status=5|Team=2");
+        callGameFunction("%SetPlayerStatus?Slot=4|Status=5|Team=2");
+        callGameFunction("%SetPlayerStatus?Slot=5|Status=5|Team=2");
     }
 
     private function findSixPlayersMap() {
@@ -229,69 +211,6 @@ class ra3.Lan {
             if (isSixPlayers) {
                 var isNormalMap = MapHeuristic.isNormalSixPlayersMap(positions.array);
                 _sixPlayersMaps.push(currentMap);
-
-
-                var curId = MAPTEXTFIELDID++;
-                if (!World.test.previousPage) {
-                    allButtons.push([]);
-                    changePage(0);
-                    _logger("Initializing, " + World.test)
-                    var lg = World.test.attachMovie("TestT2", "lg", 100097)
-                    _logger("Initializing, " + lg);
-                    lg._x = 1200;
-                    lg._y = 550;
-                    var pp = World.test.attachMovie("TestT", "previousPage", 1098);
-                    _logger("Initializing, " + pp);
-                    var np = World.test.attachMovie("TestT", "nextPage", 1099);
-                    _logger("Initializing, " + np);
-                    pp._x = 11 * 105;
-                    np._x = 11 * 105;
-                    pp._y = 630;
-                    np._y = 675;
-                    pp.buttonText.text = "Previous Page";
-                    np.buttonText.text = "Next Page";
-                    var self = this;
-                    var ppb: Button = pp.button;
-                    var npb: Button = np.button;
-                    ppb.onPress = function() { self.changePage(-1); }
-                    npb.onPress = function() { self.changePage(+1); }
-                }
-                if (curButtons.length > 7 * 15) {
-                    allButtons.push([]);
-                    changePage(+1);
-                }
-                var t: MovieClip = World.test.attachMovie("TestT", "maptest" + curId, 1100 + curId);
-                t._x = (Math.floor(curId / 15) % 7 + 0.6) * 145;
-                t._y = (curId % 15 + 0.8) * 45;
-                t.buttonText.text = "Map Id " + currentMap;
-                for (var i = 0; i < _allMaps.length; ++i) {
-                    if (_allMaps[i] === currentMap) {
-                        t.buttonText.text = "$MP_MAP_LIST_" + i;
-                    }
-                }
-
-                var self = this;
-                t.button.onPress = function() {
-                    if (!t._visible || self._status != SIX_PLAYERS_MAP_FOUND) {
-                        return;
-                    }
-                    World.test.lg.buttonText.text = "Map ID " + currentMap + ";\n" + positions.text;
-                    World.test.lg.buttonText.text += "\nIs normal maps: " + MapHeuristic.judgeSixPlayersMap(positions.array);
-                    fscommand("CallGameFunction", "%SetMap?Map=" + currentMap);
-                    for (var i = 0; i < 6; ++i) {
-                        var x = World.test.MapPreviewComponent._x;
-                        var y = World.test.MapPreviewComponent._y;
-                        var w = World.test.MapPreviewComponent._width;
-                        var h = World.test.MapPreviewComponent._height;
-                        var mc: MovieClip = World.test["sp" + (i + 1)];
-                        mc._x = x + (positions.array[i].x - 0.5) * w;
-                        mc._y = y + (positions.array[i].y - 0.5) * h;
-                    }
-                };
-                if (!isNormalMap) {
-                    t._alpha = 50;
-                }
-                curButtons.push(t);
             }
         }
 
@@ -302,7 +221,6 @@ class ra3.Lan {
         if (next !== undefined) {
             _nextMapId = next;
             _logger("Next map: " + _nextMapId + ", next type: " + (typeof _nextMapId));
-            World.test.lg.buttonText.text = "Remaining maps: " + _maps + "; next is not undefined: " + (_nextMapId !== undefined);
 
             _switchMapTimeout = 90;
             callGameFunction("%SetMap?Map=" + _nextMapId);
@@ -310,15 +228,11 @@ class ra3.Lan {
         }
 
         _logger("No more maps");
-        World.test.lg.buttonText.text = "Choose a map from left!";
         _status = SIX_PLAYERS_MAP_FOUND;
         var randomIndex = Math.floor(Math.random() * _sixPlayersMaps.length);
         _logger("Starting with map = " + _sixPlayersMaps[randomIndex]);
         callGameFunction("%ResetRules");
         callGameFunction("%SetMap?Map=" + _sixPlayersMaps[randomIndex]);
-
-        return;
-
         callGameFunction("%StartGame");
     }
 

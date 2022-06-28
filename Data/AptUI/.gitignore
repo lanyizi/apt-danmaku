@@ -10,3 +10,4 @@
 **/*_art/apt_*_[0-9]*.tga
 **/*_geometry/[0-9]*.ru
 **/*_textures/[0-9]*.tga
+**/*_textures/[0-9]*.tga.noPack

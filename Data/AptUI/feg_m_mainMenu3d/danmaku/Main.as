@@ -1,4 +1,4 @@
-import danmaku.Game;
+﻿import danmaku.Game;
 import danmaku.World;
 import danmaku.components.Alice;
 import danmaku.components.AliceStage1;
@@ -15,9 +15,6 @@ import danmaku.utilities.Diagnostics;
 import ra3.Lan;
 import ra3.MessageHandler;
 import ra3.GameSound;
-/*Sketchfab
-vavedet760@sinagalore.com
-Pi=3.1415926*/
 
 class danmaku.Main {
     public static function initialize(movieClip: MovieClip): Void {
@@ -74,6 +71,11 @@ class danmaku.Main {
             // 创建边框
             var border: Border = new Border(borderMovieClip, playerControl, world);
         });
+
+        // 在游戏结束之后执行的函数
+        Game.instance().onGameVictory = function() {
+            showVictoryDialogue(messageHandler, world, overlayMovieClip);
+        };
 
         // 播放音乐
         GameSound.play("AyakashiSet05TheDollMakerOfBucuresti", 4 * 60 + 40);
@@ -140,6 +142,41 @@ class danmaku.Main {
                 world.removeOnFrameListener("dialog1");
                 Game.instance().fighting = true;
             }
+        });
+    }
+
+    // 显示游戏胜利之后的对话
+    private static function showVictoryDialogue(messageHandler: MessageHandler, world: World, overlay: MovieClip): Void {
+        var sprite = overlay.attachMovie("GameDialogue", "dialog", 50);
+        sprite._x = 683;
+        sprite._y = 384;
+        var dialog: GameDialogue = new GameDialogue(sprite, [
+            { title: "爱丽丝", character: "alice", text: "行啦行啦，在 30FPS 的世界里打弹幕游戏有什么意思~" },
+            { title: "灵梦", character: "reimuAngry", text: "……咦！怎么变成 30FPS 了，以前不都是 60 FPS 的吗？" },
+            { title: "爱丽丝", character: "alice", text: "灵梦看来肯定不知道红色警戒3呢" },
+            { title: "爱丽丝", character: "alice", text: "这是一款由云亼开发的即时战略游戏，大概是因为这款游戏早就死透了，所以幻想入了吧（" },
+            { title: "爱丽丝", character: "alice", text: "与其互扔符卡，灵梦不如来和我的人偶们打一局红警3呀！" },
+            { title: "灵梦", character: "reimuNormal", text: "……所以你那些“人工智能”人偶其实就是用来打电子游戏的吗" },
+            { title: "爱丽丝", character: "alice", text: "诶~ 之前还来势汹汹的，现在怯战了吗？" },
+            { title: "灵梦", character: "reimuAngry", text: "看来被看扁了呢，哪怕是红色警戒3，我一打五也没问题！" }
+        ]);
+        world.addOnFrameListener("dialog2", function() {
+            dialog.update();
+            if (dialog.isFinished()) {
+                world.removeOnFrameListener("dialog2");
+                createRa3Match(messageHandler, world);
+            }
+        });
+    }
+
+    private static function createRa3Match(messageHandler: MessageHandler, world: World): Void {
+        var lan: Lan = new Lan(messageHandler, log, Game.instance().difficulty);
+        world.addOnFrameListener("lanGame", function() {
+            lan.tryCreateLanGame();
+            lan.processPendingTasks();
+        });
+        messageHandler.addOnExitScreenHandler(function() {
+            world.removeOnFrameListener("lanGame");
         });
     }
 
