@@ -204,11 +204,15 @@ class danmaku.Main {
             { title: "爱丽丝", character: "alice", text: "诶~ 之前还来势汹汹的，现在怯战了吗？" },
             { title: "灵梦", character: "reimuAngry", text: "看来被看扁了呢，红警3又怎样，区区人偶，我一打五也没问题！" }
         ]);
+        dialog.onStepChanged = function(step) {
+            if (step === 7) {
+                createRa3Match(messageHandler, world);
+            }
+        };
         world.addOnFrameListener("dialog2", function() {
             dialog.update();
             if (dialog.isFinished()) {
                 world.removeOnFrameListener("dialog2");
-                createRa3Match(messageHandler, world);
             }
         });
     }

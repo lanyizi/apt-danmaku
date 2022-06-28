@@ -6,7 +6,7 @@
     </Includes>
 
     <!-- Defaults for Mission Dialogue. Derive Mission Dialogue from this one -->
-    <AudioEvent id="ModBaseMissionDialogue" inheritFrom="AudioEvent:BaseSoundEffect"
+    <AudioEvent id="ModBaseAptMusic" inheritFrom="AudioEvent:BaseSoundEffect"
         Volume="110"
         MinVolume="100"
         Limit="1"
@@ -20,7 +20,7 @@
         <VolumeSliderMultiplier Slider="AMBIENT" Multiplier="0.7" />
     </AudioEvent>
 
-    <AudioEvent id="ModBaseEva" inheritFrom="AudioEvent:BaseSoundEffect"
+    <AudioEvent id="ModBaseAptEva" inheritFrom="AudioEvent:BaseSoundEffect"
         Volume="150"
         MinVolume="100"
         Limit="1"
@@ -34,11 +34,11 @@
         <VolumeSliderMultiplier Slider="AMBIENT" Multiplier="0.7" />
     </AudioEvent>
 
-	<AudioEvent id="UnitUnderAttack" inheritFrom="AudioEvent:ModBaseEva">
+	<AudioEvent id="UnitUnderAttack" inheritFrom="AudioEvent:ModBaseAptEva">
         <Sound>Ieva_UnitUndAttack</Sound>
     </AudioEvent>
 
-    <AudioEvent id="UnitLost" inheritFrom="AudioEvent:ModBaseEva">
+    <AudioEvent id="UnitLost" inheritFrom="AudioEvent:ModBaseAptEva">
         <Sound>Ieva_UnitLost</Sound>
     </AudioEvent>
 
@@ -48,7 +48,7 @@
         GUIPreset="Default"
         PCCompression="XAS"
         IsStreamedOnPC="false" />
-    <AudioEvent id="AyakashiSet05TheDollMakerOfBucuresti" inheritFrom="AudioEvent:ModBaseMissionDialogue">
+    <AudioEvent id="AyakashiSet05TheDollMakerOfBucuresti" inheritFrom="AudioEvent:ModBaseAptMusic">
         <Sound>AyakashiSet05TheDollMakerOfBucuresti</Sound>
     </AudioEvent>
 
@@ -58,7 +58,7 @@
         GUIPreset="Default"
         PCCompression="XAS"
         IsStreamedOnPC="false" />
-    <AudioEvent id="AyakashiSet06DollJudgementTruncated" inheritFrom="AudioEvent:ModBaseMissionDialogue">
+    <AudioEvent id="AyakashiSet06DollJudgementTruncated" inheritFrom="AudioEvent:ModBaseAptMusic">
         <Sound>AyakashiSet06DollJudgementTruncated</Sound>
     </AudioEvent>
 </AssetDeclaration>
