@@ -22,4 +22,7 @@
 - 在 Apt 里使用 new Date() 会崩游戏
 - Apt 的 getTimer() 返回的也是“帧数×理论帧率”，注意是理论帧率，因此也无法使用它计算真实时间，FPS 啥的就不要想了.jpg
 - 有点情况下，已经被 unload 的 apt MovieClip，在 if 表达式里仍然可能是“真”，但是尝试对它进行操作（比如说与字符串拼接）时还是会崩溃
-    比如说，假如该 MovieClip 并没有主动被 unload，但是它的 _parent 是另外的 apt 文件的 MovieClip，而且 _parent apt 已经被完全卸载（manifest 也卸载了），这时该 MovieClip 就会进入比较神秘的状态
+    比如说，假如该 MovieClip 并没有主动被 unload，
+    但是它的 _parent 是另外的 apt 文件的 MovieClip，而且 _parent apt 已经被完全卸载（manifest 也卸载了），
+    这时该 MovieClip 就会进入比较神秘的状态。
+    甚至 MovieClip.unload() 也会导致游戏崩溃
