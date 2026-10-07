@@ -4,7 +4,7 @@ https://github.com/lanyizi/Ra3DanmakuReleases/releases
 
 演示视频：
 【红色警戒3】我竟然在红色警戒3里玩东方！-哔哩哔哩
-https://b23.tv/HxILRIO
+https://bilibili.com/video/BV12T411379o
 
 注意！这是一个半成品，连结局都没有的那种（
 因为我时间不够，做不完了（（
